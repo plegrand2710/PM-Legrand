@@ -1,0 +1,121 @@
+package com.pauline.dm;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class GestionConviveActivity extends AppCompatActivity {
+
+    private EditText etNum ;
+    private Button boutNbConvive, valide ;
+    private Integer nbConvives , nbConvivesMax = 15 ;
+    private ViewPager vp ;
+    private TabLayout tl ;
+    private ViewPagerAdapter adapter ;
+    private ArrayList<Fragment> fragments ;
+
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_convive);
+
+        etNum = findViewById(R.id.nbConvives);
+        boutNbConvive = findViewById(R.id.confirmConvives);
+        tl = findViewById(R.id.tablayoutid);
+        vp = findViewById(R.id.viewpagerid);
+
+        listenerConvive();
+    }
+
+    public void initialiseFragments() {
+        fragments = new ArrayList<>();
+        adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        if (nbConvives > 0) {
+            for (int i = 0; i < nbConvives; i++) {
+                FragmentConvive fragmentConvive = new FragmentConvive();
+                fragments.add(fragmentConvive);
+            }
+            FragmentPartage fragmentPartage = new FragmentPartage();
+            fragments.add(fragmentPartage);
+
+        }
+        setupViewPager(vp);
+    }
+
+    public void setupViewPager(ViewPager viewPager) {
+        adapter.clearFragments();
+        for (int i = 0; i < fragments.size() - 1; i++) {
+            adapter.addFrag(fragments.get(i), "Convive " + (i + 1));
+        }
+        adapter.addFrag(fragments.get(fragments.size()-1), "Table");
+        viewPager.setAdapter(adapter);
+        tl.setupWithViewPager(viewPager);
+    }
+
+    private void listenerConvive() {
+        boutNbConvive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    int nombre = Integer.parseInt(etNum.getText().toString());
+                    if (nombre > 0 && nombre <= nbConvivesMax) {
+                        nbConvives = nombre;
+                        initialiseFragments();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Nombre de convives trop important.", Toast.LENGTH_SHORT).show();
+                    }
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getApplicationContext(), "Erreur : Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    class ViewPagerAdapter extends FragmentPagerAdapter {
+        private final List<Fragment> fragmentList = new ArrayList<>();
+        private final List<String> fragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        public void addFrag(Fragment fragment, String title) {
+            fragmentList.add(fragment);
+            fragmentTitleList.add(title);
+        }
+
+        public void clearFragments() {
+            fragmentList.clear();
+            fragmentTitleList.clear();
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitleList.get(position);
+        }
+    }
+}

@@ -2,6 +2,7 @@ package com.pauline.dm;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -66,6 +67,7 @@ public class CommandeActivity extends AppCompatActivity {
     public void commander(Boolean b, Integer nb){
         if(!b){
             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
 
         }
         else if (b) {
