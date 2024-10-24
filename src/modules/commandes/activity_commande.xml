@@ -8,12 +8,19 @@
     android:gravity="center_horizontal">
 
     <EditText
-        android:id="@+id/tableNumberInput"
+        android:id="@+id/NumEntre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/numerotable"
         android:inputType="number"
         android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/valide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/valideNum"
+        android:backgroundTint="#A0E91E63"/>
 
     <TextView
         android:id="@+id/choix"
@@ -21,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/choix" />
+
     <TextView
         android:id="@+id/selectionTable"
         android:layout_width="wrap_content"
