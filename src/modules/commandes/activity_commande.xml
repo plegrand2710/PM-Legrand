@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <EditText
+        android:id="@+id/tableNumberInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/numerotable"
+        android:inputType="number"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/choix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/choix" />
+    <TextView
+        android:id="@+id/selectionTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/selectionTable"
+        android:textAllCaps="true"
+        android:textColor="#E91E63"
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
+
+    <GridLayout
+        android:id="@+id/tableGridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:rowCount="3"
+        android:columnCount="4"
+        android:alignmentMode="alignMargins"
+        android:padding="16dp">
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table1"
+                android:src="@drawable/table1"
+                android:contentDescription="@string/t1" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table1_text"
+                android:text="@string/nt1" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table2"
+                android:src="@drawable/table5"
+                android:contentDescription="@string/t2" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table2_text"
+                android:text="@string/nt2" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table3"
+                android:src="@drawable/table2"
+                android:contentDescription="@string/t3" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table3_text"
+                android:text="@string/nt3" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table4"
+                android:src="@drawable/table4"
+                android:contentDescription="@string/t4" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table4_text"
+                android:text="@string/nt4" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table5"
+                android:src="@drawable/table3"
+                android:contentDescription="@string/t5" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table5_text"
+                android:text="@string/nt5" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table6"
+                android:src="@drawable/table2"
+                android:contentDescription="@string/t6" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table6_text"
+                android:text="@string/nt6" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table7"
+                android:src="@drawable/table1"
+                android:contentDescription="@string/t7" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table7_text"
+                android:text="@string/nt7" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table8"
+                android:src="@drawable/table4"
+                android:contentDescription="@string/t8" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table8_text"
+                android:text="@string/nt8" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table9"
+                android:src="@drawable/table2"
+                android:contentDescription="@string/t9" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table9_text"
+                android:text="@string/nt9" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table10"
+                android:src="@drawable/table4"
+                android:contentDescription="@string/t10" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table10_text"
+                android:text="@string/nt10" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table11"
+                android:src="@drawable/table1"
+                android:contentDescription="@string/t11" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table11_text"
+                android:text="@string/nt11" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table12"
+                android:src="@drawable/table5"
+                android:contentDescription="@string/t12" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table12_text"
+                android:text="@string/nt12" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table13"
+                android:src="@drawable/table3"
+                android:contentDescription="@string/t13" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table13_text"
+                android:text="@string/nt13" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table14"
+                android:src="@drawable/table2"
+                android:contentDescription="@string/t14" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table14_text"
+                android:text="@string/nt14" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table15"
+                android:src="@drawable/table5"
+                android:contentDescription="@string/t15" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table15_text"
+                android:text="@string/nt15" />
+        </FrameLayout>
+
+        <FrameLayout
+            style="@style/FrameLayout">
+
+            <ImageButton
+                style="@style/ImageBouton"
+                android:id="@+id/table16"
+                android:src="@drawable/table1"
+                android:contentDescription="@string/t16" />
+
+            <TextView
+                style="@style/TextView"
+                android:id="@+id/table16_text"
+                android:text="@string/nt16" />
+        </FrameLayout>
+    </GridLayout>
+</LinearLayout>
