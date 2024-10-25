@@ -3,6 +3,7 @@ package com.pauline.dm;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,12 +21,16 @@ public class CommandeActivity extends AppCompatActivity {
     EditText etNum ;
     ArrayList<Integer> tableOccupe = null;
     Integer nbTable = 16 ;
+    DBAdapter db ;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_commande);
+
+        db = new DBAdapter(this);
+        db.open();
 
         bValide = (Button) findViewById(R.id.valide);
         etNum = (EditText) findViewById(R.id.NumEntre);
@@ -52,23 +57,33 @@ public class CommandeActivity extends AppCompatActivity {
         tableOccupe.add(16);
         tableOccupe.add(2);
 
+        db.insertTable(4, 4);
+        db.insertTable(8, 6);
+        db.insertTable(16, 7);
+        db.insertTable(2, 3);
+
         listenerTable();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
+    }
+
     public Boolean tableAvecClient(Integer x){
-        for(int i = 0 ; i < tableOccupe.size() ; i ++){
-            if(tableOccupe.get(i) == x){
-                return true ;
-            }
+        Cursor cursor = db.getTable(x);
+        if (cursor != null && cursor.getCount() > 0) {
+            return true;
         }
-        return false ;
+        return false;
     }
 
     public void commander(Boolean b, Integer nb){
         if(!b){
             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
+            db.insertTable(nb, null);
             startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
-
         }
         else if (b) {
             AlertDialog.Builder a_builder = new AlertDialog.Builder(CommandeActivity.this);
@@ -84,6 +99,8 @@ public class CommandeActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
+                            db.insertTable(nb, null);
+                            startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
                         }
                     }) ;
             AlertDialog alert = a_builder.create();
@@ -110,101 +127,32 @@ public class CommandeActivity extends AppCompatActivity {
                 }
             }
         });
-        ib1.setOnClickListener(new View.OnClickListener() {
+
+        addTableClickListener(ib1, 1);
+        addTableClickListener(ib2, 2);
+        addTableClickListener(ib3, 3);
+        addTableClickListener(ib4, 4);
+        addTableClickListener(ib5, 5);
+        addTableClickListener(ib6, 6);
+        addTableClickListener(ib7, 7);
+        addTableClickListener(ib8, 8);
+        addTableClickListener(ib9, 9);
+        addTableClickListener(ib10, 10);
+        addTableClickListener(ib11, 11);
+        addTableClickListener(ib12, 12);
+        addTableClickListener(ib13, 13);
+        addTableClickListener(ib14, 14);
+        addTableClickListener(ib15, 15);
+        addTableClickListener(ib16, 16);
+    }
+
+    private void addTableClickListener(ImageButton tableButton, Integer tableNum) {
+        tableButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                commander(tableAvecClient(1), 1);
-            }
-        });
-        ib2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(2), 2);
-            }
-        });
-        ib3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(3), 3);
-            }
-        });
-        ib4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(4), 4);
-            }
-        });
-        ib5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(5), 5);
-            }
-        });
-        ib6.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(6), 6);
-            }
-        });
-        ib7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(7), 7);
-            }
-        });
-        ib8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(8), 8);
-            }
-        });
-        ib9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(9), 9);
-            }
-        });
-        ib10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(10), 10);
-            }
-        });
-        ib11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(11), 11);
-            }
-        });
-        ib12.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(12), 12);
-            }
-        });
-        ib13.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(13), 13);
-            }
-        });
-        ib14.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(14), 14);
-            }
-        });
-        ib15.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(15), 15);
-            }
-        });
-        ib16.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                commander(tableAvecClient(16), 16);
+                commander(tableAvecClient(tableNum), tableNum);
             }
         });
     }
+
 }
