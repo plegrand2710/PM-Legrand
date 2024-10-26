@@ -1,5 +1,7 @@
 package com.pauline.dm;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -73,6 +76,10 @@ public class GestionConviveActivity extends AppCompatActivity {
                     int nombre = Integer.parseInt(etNum.getText().toString());
                     if (nombre > 0 && nombre <= nbConvivesMax) {
                         nbConvives = nombre;
+                        Intent data = new Intent("convives-nombre");
+                        data.putExtra("nbConvives", nbConvives);
+                        LocalBroadcastManager.getInstance(GestionConviveActivity.this).sendBroadcast(data);
+                        Toast.makeText(getApplicationContext(), "Nombre de convives envoyé : " + nbConvives, Toast.LENGTH_SHORT).show();
                         initialiseFragments();
                     } else {
                         Toast.makeText(getApplicationContext(), "Nombre de convives trop important.", Toast.LENGTH_SHORT).show();

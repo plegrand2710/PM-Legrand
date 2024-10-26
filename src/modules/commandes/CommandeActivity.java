@@ -1,8 +1,11 @@
 package com.pauline.dm;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import java.util.ArrayList;
 
@@ -22,6 +26,9 @@ public class CommandeActivity extends AppCompatActivity {
     ArrayList<Integer> tableOccupe = null;
     Integer nbTable = 16 ;
     DBAdapter db ;
+    Integer request_Code = 1;
+    Integer tbSelectionnee ;
+    Context c ;
 
 
     @Override
@@ -32,6 +39,7 @@ public class CommandeActivity extends AppCompatActivity {
         db = new DBAdapter(this);
         db.open();
 
+        c = this ;
         bValide = (Button) findViewById(R.id.valide);
         etNum = (EditText) findViewById(R.id.NumEntre);
         ib1 = (ImageButton) findViewById(R.id.table1);
@@ -72,18 +80,19 @@ public class CommandeActivity extends AppCompatActivity {
     }
 
     public Boolean tableAvecClient(Integer x){
-        Cursor cursor = db.getTable(x);
-        if (cursor != null && cursor.getCount() > 0) {
+        Integer nb = db.getTable(x).getColumnIndex("nbConvives");
+        if (nb != null && nb > 0) {
             return true;
         }
         return false;
     }
 
     public void commander(Boolean b, Integer nb){
+        tbSelectionnee = nb ;
         if(!b){
             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
-            db.insertTable(nb, null);
             startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
+            LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("convives-nombre"));
         }
         else if (b) {
             AlertDialog.Builder a_builder = new AlertDialog.Builder(CommandeActivity.this);
@@ -99,8 +108,8 @@ public class CommandeActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
-                            db.insertTable(nb, null);
                             startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
+                            LocalBroadcastManager.getInstance(c).registerReceiver(mMessageReceiver, new IntentFilter("convives-nombre"));
                         }
                     }) ;
             AlertDialog alert = a_builder.create();
@@ -108,6 +117,30 @@ public class CommandeActivity extends AppCompatActivity {
             alert.show();
         }
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int nbConvives = intent.getIntExtra("nbConvives", 0);
+            int tableNum = tbSelectionnee;
+
+
+            if (tableNum > 0) {
+                long result = db.insertTable(tableNum, nbConvives);
+                if (result != -1) {
+                    Toast.makeText(CommandeActivity.this, "Table " + tableNum + " ajoutée avec " + nbConvives + " convives", Toast.LENGTH_SHORT).show();
+                } else {
+                    db.updateTable(tableNum, nbConvives);
+                    Toast.makeText(CommandeActivity.this, "Mise à jour du nombre de convives avec " + nbConvives, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(CommandeActivity.this, "Numéro de table non valide", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+
+
 
     private void listenerTable(){
         bValide.setOnClickListener(new View.OnClickListener() {
