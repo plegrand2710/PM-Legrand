@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ public class CommandeActivity extends AppCompatActivity {
     Integer request_Code = 1;
     Integer tbSelectionnee ;
     Context c ;
+    String TAG = "DMProjet";
 
 
     @Override
@@ -65,10 +67,10 @@ public class CommandeActivity extends AppCompatActivity {
         tableOccupe.add(16);
         tableOccupe.add(2);
 
-        db.insertTable(4, 4);
-        db.insertTable(8, 6);
-        db.insertTable(16, 7);
-        db.insertTable(2, 3);
+        db.insertTable(4, 4, 1, 4);
+        db.insertTable(8, 6, 2, 4);
+        db.insertTable(16, 7, 4, 4);
+        db.insertTable(2, 3, 1, 2);
 
         listenerTable();
     }
@@ -79,12 +81,20 @@ public class CommandeActivity extends AppCompatActivity {
         db.close();
     }
 
-    public Boolean tableAvecClient(Integer x){
-        Integer nb = db.getTable(x).getColumnIndex("nbConvives");
-        if (nb != null && nb > 0) {
-            return true;
+    public Boolean tableAvecClient(Integer x) {
+        Cursor cursor = db.getTable(x);
+        if (cursor != null && cursor.moveToFirst()) {
+            int nbConvivesIndex = cursor.getColumnIndex(DBAdapter.KEY_NBCONVIVES);
+            int nbConvives = cursor.getInt(nbConvivesIndex);
+            Log.d(TAG, "tableAvecClient: nb convives = " + nbConvives);
+            cursor.close();
+            return nbConvives > 0;
+        } else {
+            if (cursor != null) {
+                cursor.close();
+            }
+            return false;
         }
-        return false;
     }
 
     public void commander(Boolean b, Integer nb){
@@ -126,11 +136,11 @@ public class CommandeActivity extends AppCompatActivity {
 
 
             if (tableNum > 0) {
-                long result = db.insertTable(tableNum, nbConvives);
+                long result = db.insertTable(tableNum, nbConvives, tableNum, tableNum);
                 if (result != -1) {
                     Toast.makeText(CommandeActivity.this, "Table " + tableNum + " ajoutée avec " + nbConvives + " convives", Toast.LENGTH_SHORT).show();
                 } else {
-                    db.updateTable(tableNum, nbConvives);
+                    db.updateTable(tableNum, nbConvives, tableNum, tableNum);
                     Toast.makeText(CommandeActivity.this, "Mise à jour du nombre de convives avec " + nbConvives, Toast.LENGTH_SHORT).show();
                 }
             } else {
