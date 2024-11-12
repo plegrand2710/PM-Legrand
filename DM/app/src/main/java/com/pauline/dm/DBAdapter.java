@@ -255,4 +255,45 @@ public class DBAdapter {
     public int deleteContient(int idCommande, int idProduit) {
         return db.delete(TABLE_CONTIENT, KEY_IDCOMMANDE_FK + "=? AND " + KEY_IDPRODUIT_FK + "=?", new String[]{String.valueOf(idCommande), String.valueOf(idProduit)});
     }
+
+    public void loadBD(){
+        insertTable(4, 4, 1, 4);
+        insertTable(8, 6, 2, 4);
+        insertTable(16, 7, 4, 4);
+        insertTable(2, 3, 1, 2);
+
+        insertProduit("Burger", "plat", true, 1250);
+        insertProduit("Salade César", "plat", false, 900);
+        insertProduit("Pizza Margherita", "plat", false, 1000);
+        insertProduit("Lasagne", "plat", false, 1350);
+        insertProduit("Pâtes Carbonara", "plat", false, 1100);
+        insertProduit("Steak Frites", "plat", true, 1500);
+        insertProduit("Entrecôte Frites", "plat", true, 1800);
+        insertProduit("Poulet Rôti", "plat", false, 1400);
+        insertProduit("Risotto aux Champignons", "plat", false, 1200);
+        insertProduit("Tartare de Boeuf", "plat", false, 1300);
+        insertProduit("Quiche Lorraine", "plat", false, 850);
+
+        insertProduit("Coca-Cola", "boisson", false, 200);
+        insertProduit("Eau Minérale", "boisson", false, 150);
+        insertProduit("Jus d'Orange", "boisson", false, 250);
+        insertProduit("Café Expresso", "boisson", false, 180);
+        insertProduit("Thé Vert", "boisson", false, 200);
+        insertProduit("Limonade", "boisson", false, 220);
+        insertProduit("Smoothie Fraise", "boisson", false, 300);
+        insertProduit("Vin Rouge", "boisson", false, 500);
+        insertProduit("Vin Blanc", "boisson", false, 500);
+        insertProduit("Bière", "boisson", false, 350);
+
+        insertProduit("Frites", "accompagnement",false, 350);
+        insertProduit("Riz", "accompagnement", false, 250);
+        insertProduit("Salade Verte", "accompagnement", false, 200);
+        insertProduit("Légumes Grillés", "accompagnement", false, 400);
+        insertProduit("Purée de Pommes de Terre", "accompagnement", false, 300);
+        insertProduit("Pommes de Terre Sautées", "accompagnement", false, 350);
+        insertProduit("Gratin Dauphinois", "accompagnement", false, 450);
+        insertProduit("Haricots Verts", "accompagnement", false, 280);
+        insertProduit("Chips Maison", "accompagnement", false, 300);
+        insertProduit("Onion Rings", "accompagnement", false, 320);
+    }
 }
