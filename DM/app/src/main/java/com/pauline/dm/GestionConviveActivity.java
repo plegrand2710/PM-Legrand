@@ -122,7 +122,6 @@ public class GestionConviveActivity extends AppCompatActivity {
                     int nombre = Integer.parseInt(etNum.getText().toString());
                     if (nombre > 0 && nombre <= nbConvivesMax) {
                         nbConvives = nombre;
-                        Toast.makeText(getApplicationContext(), "Nombre de convives envoyé : " + nbConvives, Toast.LENGTH_SHORT).show();
                         initialiseFragments();
                     } else {
                         Toast.makeText(getApplicationContext(), "Nombre de convives trop important.", Toast.LENGTH_SHORT).show();
@@ -137,6 +136,15 @@ public class GestionConviveActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 processusValidation();
+                try {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("nbConvives", nbConvives);
+
+                    setResult(RESULT_OK, resultIntent);
+                    //finish();
+                } catch (NumberFormatException e) {
+                    Toast.makeText(GestionConviveActivity.this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
