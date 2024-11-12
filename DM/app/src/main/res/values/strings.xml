@@ -38,5 +38,6 @@
     <string name="valideNum">Sélectionner cette table</string>
     <string name="entrerConvive">Entrer le nombre de convives</string>
     <string name="valideConvive">Confirmer le nombre de convives</string>
+    <string name="valideCommande">valider la commande</string>
 
 </resources>

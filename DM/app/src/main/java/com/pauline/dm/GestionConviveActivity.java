@@ -3,9 +3,11 @@ package com.pauline.dm;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,12 +25,16 @@ import java.util.List;
 public class GestionConviveActivity extends AppCompatActivity {
 
     private EditText etNum ;
-    private Button boutNbConvive, valide ;
+    private Button boutNbConvive, bValideCommande ;
     private Integer nbConvives , nbConvivesMax = 15 ;
     private ViewPager vp ;
     private TabLayout tl ;
     private ViewPagerAdapter adapter ;
     private ArrayList<Fragment> fragments ;
+    private ProgressBar progressBar;
+    private Button btnValiderCommande;
+    private Handler handler = new Handler();
+    private int progressStatus = 0;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,8 @@ public class GestionConviveActivity extends AppCompatActivity {
         boutNbConvive = findViewById(R.id.confirmConvives);
         tl = findViewById(R.id.tablayoutid);
         vp = findViewById(R.id.viewpagerid);
+        btnValiderCommande = (Button) findViewById(R.id.validerCommande);
+        progressBar = findViewById(R.id.progressBar);
 
         listenerConvive();
     }
@@ -68,6 +76,44 @@ public class GestionConviveActivity extends AppCompatActivity {
         tl.setupWithViewPager(viewPager);
     }
 
+    private void processusValidation() {
+        progressBar.setVisibility(View.VISIBLE);
+        progressBar.setProgress(0);
+        progressBar.setMax(100);
+        progressStatus = 0;
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (progressStatus < 100) {
+                    progressStatus += doSomeWork();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressBar.setProgress(progressStatus);
+                        }
+                    });
+                }
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(GestionConviveActivity.this, "Commande validée avec succès", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            private int doSomeWork() {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return 10;
+            }
+        }).start();
+    }
+
     private void listenerConvive() {
         boutNbConvive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,9 +122,6 @@ public class GestionConviveActivity extends AppCompatActivity {
                     int nombre = Integer.parseInt(etNum.getText().toString());
                     if (nombre > 0 && nombre <= nbConvivesMax) {
                         nbConvives = nombre;
-                        Intent data = new Intent("convives-nombre");
-                        data.putExtra("nbConvives", nbConvives);
-                        LocalBroadcastManager.getInstance(GestionConviveActivity.this).sendBroadcast(data);
                         Toast.makeText(getApplicationContext(), "Nombre de convives envoyé : " + nbConvives, Toast.LENGTH_SHORT).show();
                         initialiseFragments();
                     } else {
@@ -87,6 +130,13 @@ public class GestionConviveActivity extends AppCompatActivity {
                 } catch (NumberFormatException e) {
                     Toast.makeText(getApplicationContext(), "Erreur : Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        btnValiderCommande.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                processusValidation();
             }
         });
     }

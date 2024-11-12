@@ -102,7 +102,7 @@ public class CommandeActivity extends AppCompatActivity {
         if(!b){
             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
-            LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("convives-nombre"));
+            //LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("convives-nombre"));
         }
         else if (b) {
             AlertDialog.Builder a_builder = new AlertDialog.Builder(CommandeActivity.this);
@@ -119,7 +119,7 @@ public class CommandeActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
-                            LocalBroadcastManager.getInstance(c).registerReceiver(mMessageReceiver, new IntentFilter("convives-nombre"));
+                            //LocalBroadcastManager.getInstance(c).registerReceiver(mMessageReceiver, new IntentFilter("convives-nombre"));
                         }
                     }) ;
             AlertDialog alert = a_builder.create();
