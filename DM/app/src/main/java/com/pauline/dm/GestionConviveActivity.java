@@ -1,6 +1,7 @@
 package com.pauline.dm;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -47,6 +47,7 @@ public class GestionConviveActivity extends AppCompatActivity {
         vp = findViewById(R.id.viewpagerid);
         btnValiderCommande = (Button) findViewById(R.id.validerCommande);
         progressBar = findViewById(R.id.progressBar);
+
 
         listenerConvive();
     }
@@ -136,17 +137,22 @@ public class GestionConviveActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 processusValidation();
-                try {
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("nbConvives", nbConvives);
-
-                    setResult(RESULT_OK, resultIntent);
-                    finish();
-                } catch (NumberFormatException e) {
-                    Toast.makeText(GestionConviveActivity.this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
-                }
+                retournerValeursACommandeActivity();
             }
         });
+    }
+
+    private void retournerValeursACommandeActivity() {
+        try {
+            Intent intent = new Intent(GestionConviveActivity.this, CommandeActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("nbConvives", nbConvives);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            finish();
+        } catch (NumberFormatException e) {
+            Toast.makeText(GestionConviveActivity.this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

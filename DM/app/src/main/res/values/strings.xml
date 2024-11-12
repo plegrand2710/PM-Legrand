@@ -39,5 +39,14 @@
     <string name="entrerConvive">Entrer le nombre de convives</string>
     <string name="valideConvive">Confirmer le nombre de convives</string>
     <string name="valideCommande">valider la commande</string>
+    <string name="boisson">Boisson</string>
+    <string name="accompagnement">Accompagnement</string>
+    <string name="plat">Plat</string>
+    <string name="bleu">Bleu</string>
+    <string name="medium">Medium</string>
+    <string name="Saignant">Saignant</string>
+    <string name="BienCuit">Bien cuit</string>
+    <string name="aPoint">À point</string>
+
 
 </resources>

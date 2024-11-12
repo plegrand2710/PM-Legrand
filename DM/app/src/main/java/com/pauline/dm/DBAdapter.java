@@ -37,15 +37,15 @@ public class DBAdapter {
     static final String TABLE_PRODUIT = "produit";
     static final String KEY_IDPRODUIT = "idProduit";
     static final String KEY_NOMPRODUIT = "nomProduit";
-    static final String KEY_CUISSON = "cuissonProduit";
+    static final String KEY_CUISSON = "cuisson";
     static final String KEY_CATEGORIE = "categorie";
     static final String KEY_PRIX = "prix";
     static final String CREATE_TABLE_PRODUIT =
             "CREATE TABLE " + TABLE_PRODUIT + " (" +
                     KEY_IDPRODUIT + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     KEY_NOMPRODUIT + " TEXT NOT NULL, " +
-                    KEY_CUISSON + " TEXT CHECK(" + KEY_CUISSON + " IN ('0', '1', '2', '3', '4')) DEFAULT '0' NOT NULL, " +
-                    KEY_CATEGORIE + " TEXT CHECK(" + KEY_CATEGORIE + " IN ('plat', 'boisson', 'dessert')) NOT NULL, " +
+                    KEY_CATEGORIE + " TEXT CHECK(" + KEY_CATEGORIE + " IN ('plat', 'boisson', 'accompagnement')) NOT NULL, " +
+                    KEY_CUISSON + " BOOLEAN NOT NULL, " +
                     KEY_PRIX + " REAL NOT NULL);";
 
     static final String TABLE_COMMANDE = "commande";
@@ -57,7 +57,7 @@ public class DBAdapter {
             "CREATE TABLE " + TABLE_COMMANDE + " (" +
                     KEY_IDCOMMANDE + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     KEY_STATUS + " TEXT CHECK(" + KEY_STATUS + " IN ('en cours', 'réglée')) DEFAULT 'en cours', " +
-                    KEY_CUISSON_COMMANDE + " TEXT, " +
+                    KEY_CUISSON_COMMANDE + " TEXT CHECK(" + KEY_CUISSON_COMMANDE + " IN ('0', '1', '2', '3', '4')) DEFAULT '0' NOT NULL, " +
                     KEY_NUMTABLE_FK + " INTEGER, " +
                     "FOREIGN KEY (" + KEY_NUMTABLE_FK + ") REFERENCES " + TABLE_TABLES + "(" + KEY_NUMTABLE + ") ON DELETE SET NULL);";
 
@@ -154,13 +154,11 @@ public class DBAdapter {
     }
 
     public long insertTable(int numTable, int nbConvives, int nbColonne, int nbLigne) {
-        Log.d(TAG, "insertTable: j'essaye d'inserer");
         ContentValues values = new ContentValues();
         values.put(KEY_NUMTABLE, numTable);
         values.put(KEY_NBCONVIVES, nbConvives);
         values.put(KEY_NBCOLONNE, nbColonne);
         values.put(KEY_NBLIGNE, nbLigne);
-        Log.d(TAG, "insertTable: je vais inserer");
         return db.insert(TABLE_TABLES, null, values);
     }
 
@@ -169,12 +167,10 @@ public class DBAdapter {
     }
 
     public int updateTable(int numTable, int nbConvives, int nbColonne, int nbLigne) {
-        Log.d(TAG, "updateTable: je suis dans l'update");
         ContentValues values = new ContentValues();
         values.put(KEY_NBCONVIVES, nbConvives);
         values.put(KEY_NBCOLONNE, nbColonne);
         values.put(KEY_NBLIGNE, nbLigne);
-        Log.d(TAG, "updateTable: j'ajoute dans la base");
         return db.update(TABLE_TABLES, values, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
     }
 
@@ -182,12 +178,13 @@ public class DBAdapter {
         return db.delete(TABLE_TABLES, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
     }
 
-    public long insertProduit(String nomProduit, String cuisson, String categorie, double prix) {
+    public long insertProduit(String nomProduit, String categorie, Boolean cuisson, double prix) {
         ContentValues values = new ContentValues();
         values.put(KEY_NOMPRODUIT, nomProduit);
-        values.put(KEY_CUISSON, cuisson);
         values.put(KEY_CATEGORIE, categorie);
+        values.put(KEY_CUISSON, cuisson);
         values.put(KEY_PRIX, prix);
+        Log.d(TAG, "insertProduit: j'insere dans la base");
         return db.insert(TABLE_PRODUIT, null, values);
     }
 
@@ -195,11 +192,15 @@ public class DBAdapter {
         return db.query(TABLE_PRODUIT, null, KEY_IDPRODUIT + "=?", new String[]{String.valueOf(idProduit)}, null, null, null);
     }
 
-    public int updateProduit(int idProduit, String nomProduit, String categorie, String cuisson, double prix) {
+    public Cursor getProduitsByCategorie(String categorie) {
+        return db.query(TABLE_PRODUIT, null, KEY_CATEGORIE + "=?", new String[]{categorie}, null, null, null);
+    }
+
+    public int updateProduit(int idProduit, String nomProduit, String categorie, Boolean cuisson, double prix) {
         ContentValues values = new ContentValues();
         values.put(KEY_NOMPRODUIT, nomProduit);
-        values.put(KEY_CUISSON, cuisson);
         values.put(KEY_CATEGORIE, categorie);
+        values.put(KEY_CUISSON, cuisson);
         values.put(KEY_PRIX, prix);
         return db.update(TABLE_PRODUIT, values, KEY_IDPRODUIT + "=?", new String[]{String.valueOf(idProduit)});
     }

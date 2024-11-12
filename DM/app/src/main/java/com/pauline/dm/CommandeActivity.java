@@ -74,6 +74,40 @@ public class CommandeActivity extends AppCompatActivity {
         db.insertTable(16, 7, 4, 4);
         db.insertTable(2, 3, 1, 2);
 
+        db.insertProduit("Burger", "plat", true, 1250);
+        db.insertProduit("Salade César", "plat", false, 900);
+        db.insertProduit("Pizza Margherita", "plat", false, 1000);
+        db.insertProduit("Lasagne", "plat", false, 1350);
+        db.insertProduit("Pâtes Carbonara", "plat", false, 1100);
+        db.insertProduit("Steak Frites", "plat", true, 1500);
+        db.insertProduit("Entrecôte Frites", "plat", true, 1800);
+        db.insertProduit("Poulet Rôti", "plat", false, 1400);
+        db.insertProduit("Risotto aux Champignons", "plat", false, 1200);
+        db.insertProduit("Tartare de Boeuf", "plat", false, 1300);
+        db.insertProduit("Quiche Lorraine", "plat", false, 850);
+
+        db.insertProduit("Coca-Cola", "boisson", false, 200);
+        db.insertProduit("Eau Minérale", "boisson", false, 150);
+        db.insertProduit("Jus d'Orange", "boisson", false, 250);
+        db.insertProduit("Café Expresso", "boisson", false, 180);
+        db.insertProduit("Thé Vert", "boisson", false, 200);
+        db.insertProduit("Limonade", "boisson", false, 220);
+        db.insertProduit("Smoothie Fraise", "boisson", false, 300);
+        db.insertProduit("Vin Rouge", "boisson", false, 500);
+        db.insertProduit("Vin Blanc", "boisson", false, 500);
+        db.insertProduit("Bière", "boisson", false, 350);
+
+        db.insertProduit("Frites", "accompagnement",false, 350);
+        db.insertProduit("Riz", "accompagnement", false, 250);
+        db.insertProduit("Salade Verte", "accompagnement", false, 200);
+        db.insertProduit("Légumes Grillés", "accompagnement", false, 400);
+        db.insertProduit("Purée de Pommes de Terre", "accompagnement", false, 300);
+        db.insertProduit("Pommes de Terre Sautées", "accompagnement", false, 350);
+        db.insertProduit("Gratin Dauphinois", "accompagnement", false, 450);
+        db.insertProduit("Haricots Verts", "accompagnement", false, 280);
+        db.insertProduit("Chips Maison", "accompagnement", false, 300);
+        db.insertProduit("Onion Rings", "accompagnement", false, 320);
+
         listenerTable();
     }
 
@@ -133,8 +167,9 @@ public class CommandeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_CODE_CONVIVES && resultCode == RESULT_OK) {
-            int nbConvives = data.getIntExtra("nbConvives", 0);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            int nbConvives = extras.getInt("nbConvives", 0);
             int tableNum = tbSelectionnee;
             if (tableNum > 0) {
                 long result = db.insertTable(tableNum, nbConvives, tableNum, tableNum);
@@ -146,7 +181,6 @@ public class CommandeActivity extends AppCompatActivity {
                     Toast.makeText(CommandeActivity.this, "Mise à jour du nombre de convives avec " + nbConvives, Toast.LENGTH_SHORT).show();
                 }
             }
-
         }
     }
 

@@ -5,21 +5,56 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/platEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Plat" />
+        android:hint="@string/plat" />
 
-    <EditText
-        android:id="@+id/cuissonEditText"
+    <CheckBox
+        android:id="@+id/bleuCheckBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Cuisson" />
+        android:visibility="gone"
+        android:text="@string/bleu" />
 
-    <EditText
+    <CheckBox
+        android:id="@+id/saignantCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/Saignant" />
+
+    <CheckBox
+        android:id="@+id/mediumCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/medium" />
+
+    <CheckBox
+        android:id="@+id/bienCuitCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/BienCuit" />
+
+    <CheckBox
+        android:id="@+id/aPointCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/aPoint" />
+
+    <AutoCompleteTextView
+        android:id="@+id/accompagnementEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/accompagnement" />
+
+    <AutoCompleteTextView
         android:id="@+id/boissonEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Boisson" />
+        android:hint="@string/boisson" />
 </LinearLayout>
