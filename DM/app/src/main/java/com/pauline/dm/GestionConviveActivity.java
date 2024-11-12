@@ -141,7 +141,7 @@ public class GestionConviveActivity extends AppCompatActivity {
                     resultIntent.putExtra("nbConvives", nbConvives);
 
                     setResult(RESULT_OK, resultIntent);
-                    //finish();
+                    finish();
                 } catch (NumberFormatException e) {
                     Toast.makeText(GestionConviveActivity.this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
                 }

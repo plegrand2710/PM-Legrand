@@ -77,7 +77,7 @@ public class DBAdapter {
                     "FOREIGN KEY (" + KEY_IDPRODUIT_FK + ") REFERENCES " + TABLE_PRODUIT + "(" + KEY_IDPRODUIT + ") ON DELETE CASCADE);";
 
 
-    static final String TAG = "DBAdapter";
+    static final String TAG = "DMProjet";
     static final String DATABASE_NAME = "MyDB";
     static final int DATABASE_VERSION = 1;
     final Context context;
@@ -154,11 +154,13 @@ public class DBAdapter {
     }
 
     public long insertTable(int numTable, int nbConvives, int nbColonne, int nbLigne) {
+        Log.d(TAG, "insertTable: j'essaye d'inserer");
         ContentValues values = new ContentValues();
         values.put(KEY_NUMTABLE, numTable);
         values.put(KEY_NBCONVIVES, nbConvives);
         values.put(KEY_NBCOLONNE, nbColonne);
         values.put(KEY_NBLIGNE, nbLigne);
+        Log.d(TAG, "insertTable: je vais inserer");
         return db.insert(TABLE_TABLES, null, values);
     }
 
@@ -167,10 +169,12 @@ public class DBAdapter {
     }
 
     public int updateTable(int numTable, int nbConvives, int nbColonne, int nbLigne) {
+        Log.d(TAG, "updateTable: je suis dans l'update");
         ContentValues values = new ContentValues();
         values.put(KEY_NBCONVIVES, nbConvives);
         values.put(KEY_NBCOLONNE, nbColonne);
         values.put(KEY_NBLIGNE, nbLigne);
+        Log.d(TAG, "updateTable: j'ajoute dans la base");
         return db.update(TABLE_TABLES, values, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
     }
 

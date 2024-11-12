@@ -120,8 +120,8 @@ public class CommandeActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
-                        }
+                            Intent intent = new Intent(CommandeActivity.this, GestionConviveActivity.class);
+                            startActivityForResult(intent, REQUEST_CODE_CONVIVES);                        }
                     }) ;
             AlertDialog alert = a_builder.create();
             alert.setTitle("Une commande existe déja pour la table " + nb + " !");
@@ -135,7 +135,17 @@ public class CommandeActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE_CONVIVES && resultCode == RESULT_OK) {
             int nbConvives = data.getIntExtra("nbConvives", 0);
-            Toast.makeText(this, "Nombre de convives : " + nbConvives, Toast.LENGTH_SHORT).show();
+            int tableNum = tbSelectionnee;
+            if (tableNum > 0) {
+                long result = db.insertTable(tableNum, nbConvives, tableNum, tableNum);
+                Toast.makeText(CommandeActivity.this, "resultats =  " + result, Toast.LENGTH_SHORT).show();
+                if (result != -1) {
+                    Toast.makeText(CommandeActivity.this, "Table " + tableNum + " ajoutée avec " + nbConvives + " convives", Toast.LENGTH_SHORT).show();
+                } else {
+                    db.updateTable(tableNum, nbConvives, tableNum, tableNum);
+                    Toast.makeText(CommandeActivity.this, "Mise à jour du nombre de convives avec " + nbConvives, Toast.LENGTH_SHORT).show();
+                }
+            }
 
         }
     }
