@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/platEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/plat" />
+
+    <CheckBox
+        android:id="@+id/bleuCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/bleu" />
+
+    <CheckBox
+        android:id="@+id/saignantCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/Saignant" />
+
+    <CheckBox
+        android:id="@+id/mediumCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/medium" />
+
+    <CheckBox
+        android:id="@+id/bienCuitCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/BienCuit" />
+
+    <CheckBox
+        android:id="@+id/aPointCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:text="@string/aPoint" />
+
+    <EditText
+        android:id="@+id/accompagnementEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/accompagnement" />
+
+    <EditText
+        android:id="@+id/boissonEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/boisson" />
+</LinearLayout>
