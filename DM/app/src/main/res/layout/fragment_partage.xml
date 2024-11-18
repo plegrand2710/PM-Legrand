@@ -5,15 +5,61 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <EditText
-        android:id="@+id/sharedDishEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Plat partagé" />
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/sharedBoissonEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Boisson partagée" />
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <AutoCompleteTextView
+                android:id="@+id/platPartageEditText"
+                android:layout_width="252dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/platPartage" />
+
+            <EditText
+                android:id="@+id/platPartageQuantiteEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/nombre" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <AutoCompleteTextView
+                android:id="@+id/accompagnementPartageEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/accompagnementPartage" />
+
+            <EditText
+                android:id="@+id/accompagmentPartageQuantiteEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/nombre" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <AutoCompleteTextView
+                android:id="@+id/boissonPartageEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/boissonPartage" />
+
+            <EditText
+                android:id="@+id/boissonPartageQuantiteEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/nombre" />
+        </TableRow>
+
+    </TableLayout>
+
 </LinearLayout>

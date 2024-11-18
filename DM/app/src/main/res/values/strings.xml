@@ -47,6 +47,8 @@
     <string name="Saignant">Saignant</string>
     <string name="BienCuit">Bien cuit</string>
     <string name="aPoint">À point</string>
-
-
+    <string name="boissonPartage">Boisson Partagé</string>
+    <string name="accompagnementPartage">Accompagnement Partagé</string>
+    <string name="platPartage">Plat Partagé</string>
+    <string name="nombre">Quantité</string>
 </resources>

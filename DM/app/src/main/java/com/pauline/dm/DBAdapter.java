@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DBAdapter {
-
+    private static final String[] TABLES = {"utilisateurs", "tables", "produit", "commande", "contient"};
     static final String TABLE_UTILISATEURS = "utilisateurs";
     static final String KEY_IDUTILISATEUR = "idUtilisateur";
     static final String KEY_IDENTIFIANT = "identifiant";
@@ -137,6 +137,15 @@ public class DBAdapter {
         return db.insert(DBAdapter.TABLE_UTILISATEURS, null, values);
     }
 
+    public long insertUtilisateur(Integer idUtilisateur, String identifiant, String mdp, String role) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDUTILISATEUR, idUtilisateur);
+        values.put(KEY_IDENTIFIANT, identifiant);
+        values.put(DBAdapter.KEY_MDP, mdp);
+        values.put(DBAdapter.KEY_ROLE, role);
+        return db.insert(DBAdapter.TABLE_UTILISATEURS, null, values);
+    }
+
     public Cursor getUtilisateur(String identifiant) {
         return db.query(DBAdapter.TABLE_UTILISATEURS, null, DBAdapter.KEY_IDENTIFIANT + "=?", new String[]{identifiant}, null, null, null);
     }
@@ -187,6 +196,17 @@ public class DBAdapter {
         return db.insert(TABLE_PRODUIT, null, values);
     }
 
+    public long insertProduit(Integer idProduit, String nomProduit, String categorie, Boolean cuisson, double prix) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDPRODUIT, idProduit);
+        values.put(KEY_NOMPRODUIT, nomProduit);
+        values.put(KEY_CATEGORIE, categorie);
+        values.put(KEY_CUISSON, cuisson);
+        values.put(KEY_PRIX, prix);
+        Log.d(TAG, "insertProduit: insertion en cours");
+        return db.insert(TABLE_PRODUIT, null, values);
+    }
+
     public Cursor getProduit(int idProduit) {
         return db.query(TABLE_PRODUIT, null, KEY_IDPRODUIT + "=?", new String[]{String.valueOf(idProduit)}, null, null, null);
     }
@@ -194,7 +214,7 @@ public class DBAdapter {
     public Cursor getProduitsByCategorie(String categorie) {
         return db.query(TABLE_PRODUIT, null, KEY_CATEGORIE + "=?", new String[]{categorie}, null, null, null);
     }
-    
+
     public int updateProduit(int idProduit, String nomProduit, String categorie, Boolean cuisson, double prix) {
         ContentValues values = new ContentValues();
         values.put(KEY_NOMPRODUIT, nomProduit);
@@ -210,6 +230,15 @@ public class DBAdapter {
 
     public long insertCommande(String status, String cuisson, int numTable) {
         ContentValues values = new ContentValues();
+        values.put(KEY_STATUS, status);
+        values.put(KEY_CUISSON_COMMANDE, cuisson);
+        values.put(KEY_NUMTABLE_FK, numTable);
+        return db.insert(TABLE_COMMANDE, null, values);
+    }
+
+    public long insertCommande(Integer idCommande, String status, String cuisson, int numTable) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDCOMMANDE, idCommande);
         values.put(KEY_STATUS, status);
         values.put(KEY_CUISSON_COMMANDE, cuisson);
         values.put(KEY_NUMTABLE_FK, numTable);
@@ -285,8 +314,6 @@ public class DBAdapter {
         insertProduit("Vin Blanc", "boisson", false, 500);
         insertProduit("Bière", "boisson", false, 350);
 
-        insertProduit("Frites", "accompagnement",false, 350);
-        insertProduit("Riz", "accompagnement", false, 250);
         insertProduit("Salade Verte", "accompagnement", false, 200);
         insertProduit("Légumes Grillés", "accompagnement", false, 400);
         insertProduit("Purée de Pommes de Terre", "accompagnement", false, 300);

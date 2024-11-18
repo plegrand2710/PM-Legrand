@@ -1,6 +1,7 @@
 package com.pauline.dm;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
@@ -35,8 +35,8 @@ public class GestionConviveActivity extends AppCompatActivity {
     private Button btnValiderCommande;
     private Handler handler = new Handler();
     private int progressStatus = 0;
-    private ArrayList<ConviveCommande> commandeConvive = null ;
-    private ArrayList<ArrayList<ConviveCommande>> commandeTable = null ;
+    private ArrayList<ConviveCommande> commandesConvives = null ;
+    //private ArrayList<TableCommande> commandeTable = null ;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class GestionConviveActivity extends AppCompatActivity {
         vp = findViewById(R.id.viewpagerid);
         btnValiderCommande = (Button) findViewById(R.id.validerCommande);
         progressBar = findViewById(R.id.progressBar);
+
 
         listenerConvive();
     }
@@ -139,6 +140,7 @@ public class GestionConviveActivity extends AppCompatActivity {
             public void onClick(View v) {
                 processusValidation();
                 retournerValeursACommandeActivity();
+                //recupererCommandes();
             }
         });
     }
@@ -155,6 +157,30 @@ public class GestionConviveActivity extends AppCompatActivity {
             Toast.makeText(GestionConviveActivity.this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    /*private void recupererCommandes(){
+        commandesConvives.clear();
+        commandeTable.clear();
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+            Fragment fragment = adapter.getItem(i);
+
+            if (fragment instanceof FragmentConvive) {
+                FragmentConvive conviveFragment = (FragmentConvive) fragment;
+                ConviveCommande commande = conviveFragment.getCommande();
+                if (commande != null) {
+                    commandesConvives.add(commande);
+                }
+            } else if (fragment instanceof FragmentPartage) {
+                FragmentPartage partageFragment = (FragmentPartage) fragment;
+                ConviveCommande commande = partageFragment.getCommandePartagee();
+                if (commande != null) {
+                    commandeTable.add(commande);
+                }
+            }
+        }
+    }*/
+
 
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

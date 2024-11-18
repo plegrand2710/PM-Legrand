@@ -5,10 +5,7 @@ public class ConviveCommande {
     private String _boisson ;
     private String _accompagnement ;
 
-    ConviveCommande(String plat, String boisson, String accompagnement){
-        _plat = plat ;
-        _boisson = boisson ;
-        _accompagnement = accompagnement ;
+    ConviveCommande(){
     }
 
     public String get_accompagnement() {
