@@ -1,10 +1,6 @@
-<?php
+<?php 
 
 include 'DM.php' ;
-
-// Vérification de l'existence du paramètre "table" dans l'URL
-if (isset($_GET['table'])) {
-$table = preg_replace('/[^a-zA-Z0-9_]/', '', $_GET['table']); // Nettoyage du nom de la table pour éviter les injections SQL
 
 // Préparation et exécution de la requête
 $stmt = $pdo->prepare("SELECT * FROM $table");
