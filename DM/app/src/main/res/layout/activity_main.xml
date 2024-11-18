@@ -20,15 +20,29 @@
             android:layout_marginTop="16dp"
             android:text="@string/valideCommande" />
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="483dp"
-            android:layout_height="324dp" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="483dp"
-            android:layout_height="384dp" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
+        </ScrollView>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical" />
+        </ScrollView>
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -37,7 +51,7 @@
             android:layout_height="100dp"
             android:layout_below="@id/validerCommande"
             android:layout_marginTop="16dp"
-            android:visibility="gone"  />
+            android:visibility="gone" />
     </LinearLayout>
 
 

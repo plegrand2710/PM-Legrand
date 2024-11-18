@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class GestionnaireSelect {
+public class GestionnaireSelectBDDDistante {
 
     String TAG = "DMProjet";
     private static final String BASE_URL = "http://192.168.3.128:8888/DMBDDDistante/";
@@ -23,7 +23,7 @@ public class GestionnaireSelect {
     private String tableName;
     private DBAdapter dbAdapter;
 
-    public GestionnaireSelect(Context context, String tableName, DBAdapter dbAdapter) {
+    public GestionnaireSelectBDDDistante(Context context, String tableName, DBAdapter dbAdapter) {
         this.context = context;
         this.tableName = tableName;
         this.dbAdapter = dbAdapter;
