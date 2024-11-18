@@ -7,6 +7,17 @@ $columns = [];
 $values = [];
 $placeholders = [];
 
+// Vérification de la table et des paramètres
+if (isset($_GET['table'])) {
+    $table = $_GET['table'];
+    
+    // Liste blanche des tables autorisées
+    $allowedTables = ['utilisateurs', 'tables', 'produit', 'commande', 'contient'];
+    if (!in_array($table, $allowedTables)) {
+    echo json_encode(["error" => "Table non autorisée."]);
+    exit;
+    }
+
 foreach ($_GET as $key => $value) {
 if ($key !== 'table') { // Exclure le paramètre "table"
 $columns[] = preg_replace('/[^a-zA-Z0-9_]/', '', $key); // Nettoyage des noms de colonnes
