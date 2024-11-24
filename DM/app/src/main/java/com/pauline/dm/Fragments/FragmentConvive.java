@@ -9,7 +9,6 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.pauline.dm.ConviveCommande;
@@ -30,7 +29,9 @@ public class FragmentConvive extends Fragments {
     private Button ajouterAccompagnementButton;
     private Button ajouterBoissonButton;
 
-    private LinearLayout contient;
+    private LinearLayout containerPlats;
+    private LinearLayout containerAccompagnements;
+    private LinearLayout containerBoissons;
 
     private List<ConviveCommande> commandes = new ArrayList<>();
 
@@ -43,36 +44,32 @@ public class FragmentConvive extends Fragments {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_convive, container, false);
-        contient = view.findViewById(R.id.container);
 
+        // Récupérer les conteneurs des blocs
+        containerPlats = view.findViewById(R.id.containerPlats);
+        containerAccompagnements = view.findViewById(R.id.containerAccompagnements);
+        containerBoissons = view.findViewById(R.id.containerBoissons);
+
+        // Adapter pour les listes
         adapterPlats = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listePlats);
-        AutoCompleteTextView platEditText = view.findViewById(R.id.platEditText);
-        platEditText.setThreshold(1);
-        platEditText.setAdapter(adapterPlats);
-
         adapterAccompagnements = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listeAccompagnements);
-        AutoCompleteTextView accompagnementEditText = view.findViewById(R.id.accompagnementEditText);
-        accompagnementEditText.setThreshold(1);
-        accompagnementEditText.setAdapter(adapterAccompagnements);
-
         adapterBoissons = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listeBoissons);
-        AutoCompleteTextView boissonEditText = view.findViewById(R.id.boissonEditText);
-        boissonEditText.setThreshold(1);
-        boissonEditText.setAdapter(adapterBoissons);
 
+        // Boutons d'ajout
         ajouterPlatButton = view.findViewById(R.id.ajouterPlatButton);
         ajouterAccompagnementButton = view.findViewById(R.id.ajouterAccompagnementButton);
         ajouterBoissonButton = view.findViewById(R.id.ajouterBoissonButton);
 
-        ajouterPlatButton.setOnClickListener(v -> ajouterPlat());
-        ajouterAccompagnementButton.setOnClickListener(v -> ajouterAccompagnement());
-        ajouterBoissonButton.setOnClickListener(v -> ajouterBoisson());
+        // Gestion des clics sur les boutons
+        ajouterPlatButton.setOnClickListener(v -> ajouterCommande(containerPlats, "Plat", adapterPlats));
+        ajouterAccompagnementButton.setOnClickListener(v -> ajouterCommande(containerAccompagnements, "Accompagnement", adapterAccompagnements));
+        ajouterBoissonButton.setOnClickListener(v -> ajouterCommande(containerBoissons, "Boisson", adapterBoissons));
 
         return view;
     }
 
-    private void ajouterCommande(String type, ArrayAdapter<String> adapter) {
-        if (contient.getChildCount() >= MAX_CHOIX) {
+    private void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter) {
+        if (container.getChildCount() >= MAX_CHOIX) {
             Toast.makeText(getContext(), "Vous ne pouvez ajouter que " + MAX_CHOIX + " " + type + "s.", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -106,27 +103,15 @@ public class FragmentConvive extends Fragments {
         commandeLayout.addView(choixEditText);
         commandeLayout.addView(quantiteEditText);
 
-        contient.addView(commandeLayout);
+        container.addView(commandeLayout);
 
         choixEditText.setOnItemClickListener((parent, view, position, id) -> {
             String choix = choixEditText.getText().toString();
             String quantiteStr = quantiteEditText.getText().toString();
             int quantite = quantiteStr.isEmpty() ? 1 : Integer.parseInt(quantiteStr);
 
-            Toast.makeText(getContext(), "Choisi : " + choix + " (" + quantite + ")", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), type + " ajouté : " + choix + " (" + quantite + ")", Toast.LENGTH_SHORT).show();
         });
-    }
-
-    private void ajouterPlat() {
-        ajouterCommande("Plat", adapterPlats);
-    }
-
-    private void ajouterAccompagnement() {
-        ajouterCommande("Accompagnement", adapterAccompagnements);
-    }
-
-    private void ajouterBoisson() {
-        ajouterCommande("Boisson", adapterBoissons);
     }
 
     public List<ConviveCommande> getCommandes() {
