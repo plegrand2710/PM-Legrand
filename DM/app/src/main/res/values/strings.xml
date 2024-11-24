@@ -51,4 +51,5 @@
     <string name="accompagnementPartage">Accompagnement Partagé</string>
     <string name="platPartage">Plat Partagé</string>
     <string name="nombre">Quantité</string>
+    <string name="container">Quantité</string>
 </resources>

@@ -1,60 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true">
 
-    <AutoCompleteTextView
-        android:id="@+id/platEditText"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/plat" />
+        android:orientation="vertical"
+        android:padding="16dp">
 
-    <CheckBox
-        android:id="@+id/bleuCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="@string/bleu" />
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    <CheckBox
-        android:id="@+id/saignantCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="@string/Saignant" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
 
-    <CheckBox
-        android:id="@+id/mediumCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="@string/medium" />
+                <AutoCompleteTextView
+                    android:id="@+id/platEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/plat" />
 
-    <CheckBox
-        android:id="@+id/bienCuitCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="@string/BienCuit" />
+                <EditText
+                    android:id="@+id/quantitePlat"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Quantité"
+                    android:inputType="number"
+                    android:text="1"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/aPointCheckBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:text="@string/aPoint" />
+            <CheckBox
+                android:id="@+id/bleuCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/bleu" />
 
-    <AutoCompleteTextView
-        android:id="@+id/accompagnementEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/accompagnement" />
+            <CheckBox
+                android:id="@+id/saignantCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/Saignant" />
 
-    <AutoCompleteTextView
-        android:id="@+id/boissonEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/boisson" />
-</LinearLayout>
+            <CheckBox
+                android:id="@+id/mediumCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/medium" />
+
+            <CheckBox
+                android:id="@+id/bienCuitCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/BienCuit" />
+
+            <CheckBox
+                android:id="@+id/aPointCheckBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="@string/aPoint" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/accompagnementEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/accompagnement" />
+
+                <EditText
+                    android:id="@+id/quantiteAccompagnement"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Quantité"
+                    android:inputType="number"
+                    android:text="1"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/boissonEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/boisson" />
+
+                <EditText
+                    android:id="@+id/quantiteBoisson"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Quantité"
+                    android:inputType="number"
+                    android:text="1"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+            <Button
+                android:id="@+id/ajouterPlatButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Ajouter un plat" />
+
+            <Button
+                android:id="@+id/ajouterAccompagnementButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Ajouter un accompagnement" />
+
+            <Button
+                android:id="@+id/ajouterBoissonButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="Ajouter une boisson" />
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>
