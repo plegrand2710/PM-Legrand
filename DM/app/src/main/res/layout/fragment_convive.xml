@@ -10,11 +10,10 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- Bloc Plats -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Plats"
+            android:text="@string/plat"
             android:textSize="18sp"
             android:layout_marginBottom="8dp"
             android:textStyle="bold" />
@@ -31,13 +30,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Ajouter un plat" />
+            android:text="@string/ajouterPlat" />
 
-        <!-- Bloc Accompagnements -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Accompagnements"
+            android:text="@string/accompagnement"
             android:textSize="18sp"
             android:layout_marginBottom="8dp"
             android:textStyle="bold" />
@@ -54,13 +52,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="Ajouter un accompagnement" />
+            android:text="@string/ajouterAccompagnement" />
 
-        <!-- Bloc Boissons -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Boissons"
+            android:text="@string/boisson"
             android:textSize="18sp"
             android:layout_marginBottom="8dp"
             android:textStyle="bold" />
@@ -76,7 +73,7 @@
             android:id="@+id/ajouterBoissonButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ajouter une boisson" />
+            android:text="@string/ajouterBoisson" />
 
     </LinearLayout>
 </ScrollView>

@@ -52,4 +52,7 @@
     <string name="platPartage">Plat Partagé</string>
     <string name="nombre">Quantité</string>
     <string name="container">Quantité</string>
+    <string name="ajouterBoisson">Ajouter une boisson</string>
+    <string name="ajouterAccompagnement">Ajouter un accompagnement</string>
+    <string name="ajouterPlat">Ajouter un plat</string>
 </resources>

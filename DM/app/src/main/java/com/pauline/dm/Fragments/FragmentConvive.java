@@ -45,22 +45,18 @@ public class FragmentConvive extends Fragments {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_convive, container, false);
 
-        // Récupérer les conteneurs des blocs
         containerPlats = view.findViewById(R.id.containerPlats);
         containerAccompagnements = view.findViewById(R.id.containerAccompagnements);
         containerBoissons = view.findViewById(R.id.containerBoissons);
 
-        // Adapter pour les listes
         adapterPlats = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listePlats);
         adapterAccompagnements = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listeAccompagnements);
         adapterBoissons = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listeBoissons);
 
-        // Boutons d'ajout
         ajouterPlatButton = view.findViewById(R.id.ajouterPlatButton);
         ajouterAccompagnementButton = view.findViewById(R.id.ajouterAccompagnementButton);
         ajouterBoissonButton = view.findViewById(R.id.ajouterBoissonButton);
 
-        // Gestion des clics sur les boutons
         ajouterPlatButton.setOnClickListener(v -> ajouterCommande(containerPlats, "Plat", adapterPlats));
         ajouterAccompagnementButton.setOnClickListener(v -> ajouterCommande(containerAccompagnements, "Accompagnement", adapterAccompagnements));
         ajouterBoissonButton.setOnClickListener(v -> ajouterCommande(containerBoissons, "Boisson", adapterBoissons));

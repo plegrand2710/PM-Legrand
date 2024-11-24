@@ -1,65 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true">
 
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <TableRow
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content"
+            android:text="@string/platPartage"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold" />
 
-            <AutoCompleteTextView
-                android:id="@+id/platPartageEditText"
-                android:layout_width="252dp"
-                android:layout_height="wrap_content"
-                android:hint="@string/platPartage" />
-
-            <EditText
-                android:id="@+id/platPartageQuantiteEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/nombre" />
-        </TableRow>
-
-        <TableRow
+        <LinearLayout
+            android:id="@+id/containerPlats"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp" />
 
-            <AutoCompleteTextView
-                android:id="@+id/accompagnementPartageEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/accompagnementPartage" />
-
-            <EditText
-                android:id="@+id/accompagmentPartageQuantiteEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/nombre" />
-        </TableRow>
-
-        <TableRow
+        <Button
+            android:id="@+id/ajouterPlatButton"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/ajouterPlat" />
 
-            <AutoCompleteTextView
-                android:id="@+id/boissonPartageEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/boissonPartage" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/accompagnementPartage"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/boissonPartageQuantiteEditText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="@string/nombre" />
-        </TableRow>
+        <LinearLayout
+            android:id="@+id/containerAccompagnements"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp" />
 
-    </TableLayout>
+        <Button
+            android:id="@+id/ajouterAccompagnementButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="@string/ajouterAccompagnement" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/boissonPartage"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/containerBoissons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="8dp" />
+
+        <Button
+            android:id="@+id/ajouterBoissonButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/ajouterBoisson" />
+
+    </LinearLayout>
+</ScrollView>
