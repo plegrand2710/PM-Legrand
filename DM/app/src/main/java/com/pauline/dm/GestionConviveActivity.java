@@ -1,82 +1,135 @@
 package com.pauline.dm;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.pauline.dm.Fragments.FragmentConvive;
+import com.pauline.dm.Fragments.FragmentPartage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GestionConviveActivity extends AppCompatActivity {
 
-    private EditText etNum ;
-    private Button boutNbConvive, bValideCommande ;
-    private Integer nbConvives , nbConvivesMax = 15 ;
-    private ViewPager vp ;
-    private TabLayout tl ;
-    private ViewPagerAdapter adapter ;
-    private ArrayList<Fragment> fragments ;
+    private EditText etNum;
+    private Button boutNbConvive, btnValiderCommande;
     private ProgressBar progressBar;
-    private Button btnValiderCommande;
-    private Handler handler = new Handler();
+    private int nbConvives = 0, nbConvivesMax = 15;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private ViewPagerAdapter adapter;
     private int progressStatus = 0;
-    private ArrayList<ConviveCommande> commandesConvives = null ;
-    //private ArrayList<TableCommande> commandeTable = null ;
 
+    private List<ConviveCommande> conviveCommandes = new ArrayList<>();
+    private ConviveCommande commandeTable = null;
+    private Handler handler = new Handler();
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_convive);
 
         etNum = findViewById(R.id.nbConvives);
         boutNbConvive = findViewById(R.id.confirmConvives);
-        tl = findViewById(R.id.tablayoutid);
-        vp = findViewById(R.id.viewpagerid);
-        btnValiderCommande = (Button) findViewById(R.id.validerCommande);
+        btnValiderCommande = findViewById(R.id.validerCommande);
         progressBar = findViewById(R.id.progressBar);
+        viewPager = findViewById(R.id.viewpagerid);
+        tabLayout = findViewById(R.id.tablayoutid);
 
-
-        listenerConvive();
-    }
-
-    public void initialiseFragments() {
-        fragments = new ArrayList<>();
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        if (nbConvives > 0) {
-            for (int i = 0; i < nbConvives; i++) {
-                FragmentConvive fragmentConvive = new FragmentConvive();
-                fragments.add(fragmentConvive);
-            }
-            FragmentPartage fragmentPartage = new FragmentPartage();
-            fragments.add(fragmentPartage);
 
-        }
-        setupViewPager(vp);
+        boutNbConvive.setOnClickListener(v -> ajouterConvives());
+
+        btnValiderCommande.setOnClickListener(v -> validerCommande());
     }
 
-    public void setupViewPager(ViewPager viewPager) {
-        adapter.clearFragments();
-        for (int i = 0; i < fragments.size() - 1; i++) {
-            adapter.addFrag(fragments.get(i), "Convive " + (i + 1));
+    private void ajouterConvives() {
+        try {
+            int nouveauNombre = Integer.parseInt(etNum.getText().toString());
+            if (nouveauNombre > 0 && nouveauNombre <= nbConvivesMax) {
+                nbConvives = nouveauNombre;
+                commandeTable = new ConviveCommande();
+                adapter.clearFragments();
+                setupFragments();
+                Toast.makeText(this, nbConvives + " convives ajoutés.", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Nombre de convives invalide ou trop élevé.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
         }
-        adapter.addFrag(fragments.get(fragments.size()-1), "Table");
+    }
+
+    private void setupFragments() {
+        for (int i = 0; i < nbConvives; i++) {
+            conviveCommandes.add(new ConviveCommande());
+            adapter.addFrag(new FragmentConvive(), "Convive " + (i + 1));
+        }
+        adapter.addFrag(new FragmentPartage(), "Table");
+
         viewPager.setAdapter(adapter);
-        tl.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position < conviveCommandes.size()) {
+                    FragmentConvive fragment = (FragmentConvive) adapter.getItem(position);
+                    fragment.setConviveCommande(conviveCommandes.get(position));
+                } else {
+                    FragmentPartage fragmentPartage = (FragmentPartage) adapter.getItem(position);
+                    fragmentPartage.setCommandeTable(commandeTable);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
+    }
+
+    private void validerCommande() {
+        if (conviveCommandes.isEmpty() || commandeTable == null) {
+            Toast.makeText(this, "Veuillez d'abord confirmer le nombre de convives.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        for (int i = 0; i < conviveCommandes.size(); i++) {
+            ConviveCommande commande = conviveCommandes.get(i);
+            Toast.makeText(this, "Convive " + (i + 1) + " : " + commande, Toast.LENGTH_SHORT).show();
+        }
+
+        Toast.makeText(this, "Commande Table : " + commandeTable, Toast.LENGTH_SHORT).show();
+
+        processusValidation();
+
+        retournerValeursACommandeActivity();
+    }
+
+    private void retournerValeursACommandeActivity() {
+        try {
+            Intent data = new Intent("convives-nombre");
+            data.putExtra("nbConvives", nbConvives);
+            LocalBroadcastManager.getInstance(GestionConviveActivity.this).sendBroadcast(data);
+        } catch (Exception e) {
+            Toast.makeText(GestionConviveActivity.this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void processusValidation() {
@@ -85,110 +138,29 @@ public class GestionConviveActivity extends AppCompatActivity {
         progressBar.setMax(100);
         progressStatus = 0;
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (progressStatus < 100) {
-                    progressStatus += doSomeWork();
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setProgress(progressStatus);
-                        }
-                    });
-                }
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressBar.setVisibility(View.GONE);
-                        Toast.makeText(GestionConviveActivity.this, "Commande validée avec succès", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            private int doSomeWork() {
+        new Thread(() -> {
+            while (progressStatus < 100) {
+                progressStatus += 10;
+                handler.post(() -> progressBar.setProgress(progressStatus));
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                return 10;
             }
+            handler.post(() -> {
+                progressBar.setVisibility(View.GONE);
+                Toast.makeText(GestionConviveActivity.this, "Validation réussie !", Toast.LENGTH_SHORT).show();
+            });
         }).start();
     }
-
-    private void listenerConvive() {
-        boutNbConvive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    int nombre = Integer.parseInt(etNum.getText().toString());
-                    if (nombre > 0 && nombre <= nbConvivesMax) {
-                        nbConvives = nombre;
-                        initialiseFragments();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Nombre de convives trop important.", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (NumberFormatException e) {
-                    Toast.makeText(getApplicationContext(), "Erreur : Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        btnValiderCommande.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                processusValidation();
-                retournerValeursACommandeActivity();
-                //recupererCommandes();
-            }
-        });
-    }
-
-    private void retournerValeursACommandeActivity() {
-        try {
-            Intent intent = new Intent(GestionConviveActivity.this, CommandeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt("nbConvives", nbConvives);
-            intent.putExtras(bundle);
-            startActivity(intent);
-            finish();
-        } catch (NumberFormatException e) {
-            Toast.makeText(GestionConviveActivity.this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    /*private void recupererCommandes(){
-        commandesConvives.clear();
-        commandeTable.clear();
-
-        for (int i = 0; i < adapter.getCount(); i++) {
-            Fragment fragment = adapter.getItem(i);
-
-            if (fragment instanceof FragmentConvive) {
-                FragmentConvive conviveFragment = (FragmentConvive) fragment;
-                ConviveCommande commande = conviveFragment.getCommande();
-                if (commande != null) {
-                    commandesConvives.add(commande);
-                }
-            } else if (fragment instanceof FragmentPartage) {
-                FragmentPartage partageFragment = (FragmentPartage) fragment;
-                ConviveCommande commande = partageFragment.getCommandePartagee();
-                if (commande != null) {
-                    commandeTable.add(commande);
-                }
-            }
-        }
-    }*/
-
-
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> fragmentList = new ArrayList<>();
         private final List<String> fragmentTitleList = new ArrayList<>();
 
         public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
+            super(manager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
         }
 
         @Override

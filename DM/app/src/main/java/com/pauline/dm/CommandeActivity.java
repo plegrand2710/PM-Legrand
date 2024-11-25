@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.pauline.dm.GestionBDD.DBAdapter;
+
 import java.util.ArrayList;
 
 public class CommandeActivity extends AppCompatActivity {
@@ -100,8 +102,8 @@ public class CommandeActivity extends AppCompatActivity {
         tbSelectionnee = nb ;
         if(!b){
             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
-            Intent intent = new Intent(CommandeActivity.this, GestionConviveActivity.class);
-            startActivityForResult(intent, REQUEST_CODE_CONVIVES);
+            startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
+            LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("convives-nombre"));
         }
         else if (b) {
             AlertDialog.Builder a_builder = new AlertDialog.Builder(CommandeActivity.this);
@@ -117,8 +119,8 @@ public class CommandeActivity extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Toast.makeText(getApplicationContext(), "Créer une nouvelle commande", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(CommandeActivity.this, GestionConviveActivity.class);
-                            startActivityForResult(intent, REQUEST_CODE_CONVIVES);                        }
+                            startActivity(new Intent(CommandeActivity.this, GestionConviveActivity.class));
+                            LocalBroadcastManager.getInstance(c).registerReceiver(mMessageReceiver, new IntentFilter("convives-nombre"));           }
                     }) ;
             AlertDialog alert = a_builder.create();
             alert.setTitle("Une commande existe déja pour la table " + nb + " !");
@@ -126,26 +128,25 @@ public class CommandeActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            int nbConvives = extras.getInt("nbConvives", 0);
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int nbConvives = intent.getIntExtra("nbConvives", 0);
             int tableNum = tbSelectionnee;
+
             if (tableNum > 0) {
                 long result = db.insertTable(tableNum, nbConvives, tableNum, tableNum);
-                Toast.makeText(CommandeActivity.this, "resultats =  " + result, Toast.LENGTH_SHORT).show();
                 if (result != -1) {
                     Toast.makeText(CommandeActivity.this, "Table " + tableNum + " ajoutée avec " + nbConvives + " convives", Toast.LENGTH_SHORT).show();
                 } else {
                     db.updateTable(tableNum, nbConvives, tableNum, tableNum);
                     Toast.makeText(CommandeActivity.this, "Mise à jour du nombre de convives avec " + nbConvives, Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(CommandeActivity.this, "Numéro de table non valide", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+    };
 
 
 

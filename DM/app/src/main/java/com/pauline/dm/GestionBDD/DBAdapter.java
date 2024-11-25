@@ -1,4 +1,4 @@
-package com.pauline.dm;
+package com.pauline.dm.GestionBDD;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DBAdapter {
     private static final String[] TABLES = {"utilisateurs", "tables", "produit", "commande", "contient"};
@@ -24,7 +27,7 @@ public class DBAdapter {
 
     static final String TABLE_TABLES = "tables";
     static final String KEY_NUMTABLE = "numTable";
-    static final String KEY_NBCONVIVES = "nbConvives";
+    public static final String KEY_NBCONVIVES = "nbConvives";
     static final String KEY_NBCOLONNE = "numColonne";
     static final String KEY_NBLIGNE = "numLigne";
     static final String CREATE_TABLE_TABLES =
@@ -36,7 +39,7 @@ public class DBAdapter {
 
     static final String TABLE_PRODUIT = "produit";
     static final String KEY_IDPRODUIT = "idProduit";
-    static final String KEY_NOMPRODUIT = "nomProduit";
+    public static final String KEY_NOMPRODUIT = "nomProduit";
     static final String KEY_CUISSON = "cuisson";
     static final String KEY_CATEGORIE = "categorie";
     static final String KEY_PRIX = "prix";
@@ -322,5 +325,61 @@ public class DBAdapter {
         insertProduit("Haricots Verts", "accompagnement", false, 280);
         insertProduit("Chips Maison", "accompagnement", false, 300);
         insertProduit("Onion Rings", "accompagnement", false, 320);
+    }
+
+    // Supprime toutes les données d'une table
+    public void clearTable(String tableName) {
+        db.execSQL("DELETE FROM " + tableName);
+    }
+
+    // Insère des données depuis un objet JSON
+    public void insertFromJson(String tableName, JSONObject jsonObject) throws JSONException {
+        ContentValues values = new ContentValues();
+
+        switch (tableName) {
+            case "produit":
+                values.put(KEY_IDPRODUIT, jsonObject.getInt("idProduit"));
+                values.put(KEY_NOMPRODUIT, jsonObject.getString("nomProduit"));
+                values.put(KEY_CATEGORIE, jsonObject.getString("categorie"));
+                values.put(KEY_CUISSON, Boolean.valueOf(String.valueOf(jsonObject.getInt("cuisson"))));
+                values.put(KEY_PRIX, jsonObject.getDouble("prix"));
+                db.insert(TABLE_PRODUIT, null, values);
+                break;
+
+            case "commande":
+                values.put(KEY_IDCOMMANDE, jsonObject.getInt("idCommande"));
+                values.put(KEY_STATUS, jsonObject.getString("status"));
+                values.put(KEY_CUISSON_COMMANDE, jsonObject.getString("cuisson_Commande"));
+                values.put(KEY_NUMTABLE_FK, jsonObject.getInt("numTable"));
+                db.insert(TABLE_COMMANDE, null, values);
+                break;
+
+            case "utilisateurs":
+                values.put(KEY_IDUTILISATEUR, jsonObject.getInt("idUtilisateur"));
+                values.put(KEY_IDENTIFIANT, jsonObject.getString("identifiant"));
+                values.put(KEY_MDP, jsonObject.getString("mdp"));
+                values.put(KEY_ROLE, jsonObject.getString("role"));
+                db.insert(TABLE_UTILISATEURS, null, values);
+                break;
+
+            case "contient":
+                values.put(KEY_IDCOMMANDE_FK, jsonObject.getInt("idCommande"));
+                values.put(KEY_IDPRODUIT_FK, jsonObject.getInt("idProduit"));
+                values.put(KEY_QUANTITE, jsonObject.getInt("quantite"));
+                values.put(KEY_TRAITEMENT_CONTIENT, jsonObject.getString("traitement_contient"));
+                db.insert(TABLE_CONTIENT, null, values);
+                break;
+
+            case "tables":
+                values.put(KEY_NUMTABLE, jsonObject.getInt("numTable"));
+                values.put(KEY_NBCONVIVES, jsonObject.getInt("nbConvives"));
+                values.put(KEY_NBCOLONNE, jsonObject.getInt("numColonne"));
+                values.put(KEY_NBLIGNE, jsonObject.getInt("numLigne"));
+                db.insert(TABLE_TABLES, null, values);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Table inconnue : " + tableName);
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.pauline.dm;
+package com.pauline.dm.Fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.pauline.dm.GestionBDD.DBAdapter;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.pauline.dm;
+package com.pauline.dm.GestionBDD;
 
 import android.content.Context;
 import android.widget.Toast;

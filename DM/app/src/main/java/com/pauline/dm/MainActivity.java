@@ -1,5 +1,6 @@
 package com.pauline.dm;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.pauline.dm.GestionBDD.DBAdapter;
+import com.pauline.dm.GestionBDD.GestionnaireSelectBDDDistante;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "DMProjet";
@@ -27,6 +31,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        db = new DBAdapter(this);
+        db.open();
+
+        GestionnaireSelectBDDDistante gestionnaire = new GestionnaireSelectBDDDistante(MainActivity.this, "tables", db);
+        GestionnaireSelectBDDDistante gestionnaire1 = new GestionnaireSelectBDDDistante(MainActivity.this, "produit", db);
+        GestionnaireSelectBDDDistante gestionnaire2 = new GestionnaireSelectBDDDistante(MainActivity.this, "commande", db);
+        GestionnaireSelectBDDDistante gestionnaire3 = new GestionnaireSelectBDDDistante(MainActivity.this, "contient", db);
+        GestionnaireSelectBDDDistante gestionnaire4 = new GestionnaireSelectBDDDistante(MainActivity.this, "utilisateurs", db);
+
+
+        startActivity(new Intent(MainActivity.this, CommandeActivity.class));
+        /*
         tv1 = findViewById(R.id.textView3);
         tv2 = findViewById(R.id.textView4);
         btnValiderCommande = findViewById(R.id.validerCommande);
@@ -73,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                     GestionnaireSelectBDDDistante gestionnaire = new GestionnaireSelectBDDDistante(MainActivity.this, "produit", db);*/
 
                     /*String params = "table=produit&where=idProduit=997";
-                    new GestionnaireActionBDDDistante(MainActivity.this, "delete", params);*/
+                    new GestionnaireActionBDDDistante(MainActivity.this, "delete", params);
                     GestionnaireSelectBDDDistante gestionnaire = new GestionnaireSelectBDDDistante(MainActivity.this, "produit", db);
 
 
@@ -126,6 +142,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             tv.setText("Aucune donnée locale trouvée.");
             Log.d(TAG, "Aucune donnée locale trouvée.");
-        }
+        }*/
     }
 }
