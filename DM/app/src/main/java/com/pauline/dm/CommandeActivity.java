@@ -134,7 +134,6 @@ public class CommandeActivity extends AppCompatActivity {
             int nbConvives = intent.getIntExtra("nbConvives", 0);
             int tableNum = tbSelectionnee;
 
-
             if (tableNum > 0) {
                 long result = db.insertTable(tableNum, nbConvives, tableNum, tableNum);
                 if (result != -1) {
@@ -148,26 +147,6 @@ public class CommandeActivity extends AppCompatActivity {
             }
         }
     };
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            int nbConvives = extras.getInt("nbConvives", 0);
-            int tableNum = tbSelectionnee;
-            if (tableNum > 0) {
-                long result = db.insertTable(tableNum, nbConvives, tableNum, tableNum);
-                Toast.makeText(CommandeActivity.this, "resultats =  " + result, Toast.LENGTH_SHORT).show();
-                if (result != -1) {
-                    Toast.makeText(CommandeActivity.this, "Table " + tableNum + " ajoutée avec " + nbConvives + " convives", Toast.LENGTH_SHORT).show();
-                } else {
-                    db.updateTable(tableNum, nbConvives, tableNum, tableNum);
-                    Toast.makeText(CommandeActivity.this, "Mise à jour du nombre de convives avec " + nbConvives, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
 
 
 

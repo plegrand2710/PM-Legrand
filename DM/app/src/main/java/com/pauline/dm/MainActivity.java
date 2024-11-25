@@ -35,6 +35,10 @@ public class MainActivity extends AppCompatActivity {
         db.open();
 
         GestionnaireSelectBDDDistante gestionnaire = new GestionnaireSelectBDDDistante(MainActivity.this, "tables", db);
+        GestionnaireSelectBDDDistante gestionnaire1 = new GestionnaireSelectBDDDistante(MainActivity.this, "produit", db);
+        GestionnaireSelectBDDDistante gestionnaire2 = new GestionnaireSelectBDDDistante(MainActivity.this, "commande", db);
+        GestionnaireSelectBDDDistante gestionnaire3 = new GestionnaireSelectBDDDistante(MainActivity.this, "contient", db);
+        GestionnaireSelectBDDDistante gestionnaire4 = new GestionnaireSelectBDDDistante(MainActivity.this, "utilisateurs", db);
 
 
         startActivity(new Intent(MainActivity.this, CommandeActivity.class));

@@ -85,18 +85,19 @@ public class GestionConviveActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private int previousPosition = 0;
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
             @Override
             public void onPageSelected(int position) {
-                if (position < conviveCommandes.size()) {
-                    FragmentConvive fragment = (FragmentConvive) adapter.getItem(position);
-                    fragment.setConviveCommande(conviveCommandes.get(position));
-                } else {
-                    FragmentPartage fragmentPartage = (FragmentPartage) adapter.getItem(position);
-                    fragmentPartage.setCommandeTable(commandeTable);
+                if (previousPosition < conviveCommandes.size()) {
+                    FragmentConvive fragmentConvive = (FragmentConvive) adapter.getItem(previousPosition);
+                    conviveCommandes.set(previousPosition, fragmentConvive.getConviveCommande());
                 }
+
+                previousPosition = position;
             }
 
             @Override
@@ -105,6 +106,9 @@ public class GestionConviveActivity extends AppCompatActivity {
     }
 
     private void validerCommande() {
+
+        sauvegarderConviveActuel();
+        
         if (conviveCommandes.isEmpty() || commandeTable == null) {
             Toast.makeText(this, "Veuillez d'abord confirmer le nombre de convives.", Toast.LENGTH_SHORT).show();
             return;
@@ -120,6 +124,15 @@ public class GestionConviveActivity extends AppCompatActivity {
         processusValidation();
 
         retournerValeursACommandeActivity();
+    }
+
+    private void sauvegarderConviveActuel() {
+        int positionActuelle = viewPager.getCurrentItem();
+        if (positionActuelle < conviveCommandes.size()) {
+            FragmentConvive fragmentConvive = (FragmentConvive) adapter.getItem(positionActuelle);
+            fragmentConvive.remplirConviveCommandeDepuisUI(); // Force la sauvegarde des données
+            conviveCommandes.set(positionActuelle, fragmentConvive.getConviveCommande());
+        }
     }
 
     private void retournerValeursACommandeActivity() {

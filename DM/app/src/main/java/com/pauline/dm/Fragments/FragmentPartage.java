@@ -112,7 +112,7 @@ public class FragmentPartage extends Fragments {
         });
     }
 
-    public List<ConviveCommande> getCommandes() {
+    public List<ConviveCommande> getCommandeTable() {
         return commandes;
     }
     public void setCommandeTable(ConviveCommande commandeTable) {
