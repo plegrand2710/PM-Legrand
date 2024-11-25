@@ -30,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        db = new DBAdapter(this);
+        db.open();
+
+        GestionnaireSelectBDDDistante gestionnaire = new GestionnaireSelectBDDDistante(MainActivity.this, "tables", db);
+
+
         startActivity(new Intent(MainActivity.this, CommandeActivity.class));
         /*
         tv1 = findViewById(R.id.textView3);

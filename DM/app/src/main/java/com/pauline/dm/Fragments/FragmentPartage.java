@@ -35,6 +35,8 @@ public class FragmentPartage extends Fragments {
 
     private List<ConviveCommande> commandes = new ArrayList<>();
 
+    private ConviveCommande commandeTable;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,4 +115,8 @@ public class FragmentPartage extends Fragments {
     public List<ConviveCommande> getCommandes() {
         return commandes;
     }
+    public void setCommandeTable(ConviveCommande commandeTable) {
+        this.commandeTable = commandeTable;
+    }
+
 }
