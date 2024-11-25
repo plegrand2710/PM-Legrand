@@ -40,7 +40,7 @@ public class DBAdapter {
     static final String TABLE_PRODUIT = "produit";
     static final String KEY_IDPRODUIT = "idProduit";
     public static final String KEY_NOMPRODUIT = "nomProduit";
-    static final String KEY_CUISSON = "cuisson";
+    public static final String KEY_CUISSON = "cuisson";
     static final String KEY_CATEGORIE = "categorie";
     static final String KEY_PRIX = "prix";
     static final String CREATE_TABLE_PRODUIT =
@@ -48,7 +48,7 @@ public class DBAdapter {
                     KEY_IDPRODUIT + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     KEY_NOMPRODUIT + " TEXT NOT NULL, " +
                     KEY_CATEGORIE + " TEXT CHECK(" + KEY_CATEGORIE + " IN ('plat', 'boisson', 'accompagnement')) NOT NULL, " +
-                    KEY_CUISSON + " BOOLEAN NOT NULL, " +
+                    KEY_CUISSON + " INTEGER NOT NULL, " +
                     KEY_PRIX + " REAL NOT NULL);";
 
     static final String TABLE_COMMANDE = "commande";
@@ -190,7 +190,7 @@ public class DBAdapter {
         return db.delete(TABLE_TABLES, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
     }
 
-    public long insertProduit(String nomProduit, String categorie, Boolean cuisson, double prix) {
+    public long insertProduit(String nomProduit, String categorie, int cuisson, double prix) {
         ContentValues values = new ContentValues();
         values.put(KEY_NOMPRODUIT, nomProduit);
         values.put(KEY_CATEGORIE, categorie);
@@ -199,7 +199,7 @@ public class DBAdapter {
         return db.insert(TABLE_PRODUIT, null, values);
     }
 
-    public long insertProduit(Integer idProduit, String nomProduit, String categorie, Boolean cuisson, double prix) {
+    public long insertProduit(Integer idProduit, String nomProduit, String categorie, int cuisson, double prix) {
         ContentValues values = new ContentValues();
         values.put(KEY_IDPRODUIT, idProduit);
         values.put(KEY_NOMPRODUIT, nomProduit);
@@ -218,7 +218,7 @@ public class DBAdapter {
         return db.query(TABLE_PRODUIT, null, KEY_CATEGORIE + "=?", new String[]{categorie}, null, null, null);
     }
 
-    public int updateProduit(int idProduit, String nomProduit, String categorie, Boolean cuisson, double prix) {
+    public int updateProduit(int idProduit, String nomProduit, String categorie, int cuisson, double prix) {
         ContentValues values = new ContentValues();
         values.put(KEY_NOMPRODUIT, nomProduit);
         values.put(KEY_CATEGORIE, categorie);
@@ -294,37 +294,37 @@ public class DBAdapter {
         insertTable(16, 7, 4, 4);
         insertTable(2, 3, 1, 2);
 
-        insertProduit("Burger", "plat", true, 1250);
-        insertProduit("Salade César", "plat", false, 900);
-        insertProduit("Pizza Margherita", "plat", false, 1000);
-        insertProduit("Lasagne", "plat", false, 1350);
-        insertProduit("Pâtes Carbonara", "plat", false, 1100);
-        insertProduit("Steak Frites", "plat", true, 1500);
-        insertProduit("Entrecôte Frites", "plat", true, 1800);
-        insertProduit("Poulet Rôti", "plat", false, 1400);
-        insertProduit("Risotto aux Champignons", "plat", false, 1200);
-        insertProduit("Tartare de Boeuf", "plat", false, 1300);
-        insertProduit("Quiche Lorraine", "plat", false, 850);
+        insertProduit("Burger", "plat", 1, 1250);
+        insertProduit("Salade César", "plat", 0, 900);
+        insertProduit("Pizza Margherita", "plat", 0, 1000);
+        insertProduit("Lasagne", "plat", 0, 1350);
+        insertProduit("Pâtes Carbonara", "plat", 0, 1100);
+        insertProduit("Steak Frites", "plat", 1, 1500);
+        insertProduit("Entrecôte Frites", "plat", 1, 1800);
+        insertProduit("Poulet Rôti", "plat", 0, 1400);
+        insertProduit("Risotto aux Champignons", "plat", 0, 1200);
+        insertProduit("Tartare de Boeuf", "plat", 0, 1300);
+        insertProduit("Quiche Lorraine", "plat", 0, 850);
 
-        insertProduit("Coca-Cola", "boisson", false, 200);
-        insertProduit("Eau Minérale", "boisson", false, 150);
-        insertProduit("Jus d'Orange", "boisson", false, 250);
-        insertProduit("Café Expresso", "boisson", false, 180);
-        insertProduit("Thé Vert", "boisson", false, 200);
-        insertProduit("Limonade", "boisson", false, 220);
-        insertProduit("Smoothie Fraise", "boisson", false, 300);
-        insertProduit("Vin Rouge", "boisson", false, 500);
-        insertProduit("Vin Blanc", "boisson", false, 500);
-        insertProduit("Bière", "boisson", false, 350);
+        insertProduit("Coca-Cola", "boisson", 0, 200);
+        insertProduit("Eau Minérale", "boisson", 0, 150);
+        insertProduit("Jus d'Orange", "boisson", 0, 250);
+        insertProduit("Café Expresso", "boisson", 0, 180);
+        insertProduit("Thé Vert", "boisson", 0, 200);
+        insertProduit("Limonade", "boisson", 0, 220);
+        insertProduit("Smoothie Fraise", "boisson", 0, 300);
+        insertProduit("Vin Rouge", "boisson", 0, 500);
+        insertProduit("Vin Blanc", "boisson", 0, 500);
+        insertProduit("Bière", "boisson", 0, 350);
 
-        insertProduit("Salade Verte", "accompagnement", false, 200);
-        insertProduit("Légumes Grillés", "accompagnement", false, 400);
-        insertProduit("Purée de Pommes de Terre", "accompagnement", false, 300);
-        insertProduit("Pommes de Terre Sautées", "accompagnement", false, 350);
-        insertProduit("Gratin Dauphinois", "accompagnement", false, 450);
-        insertProduit("Haricots Verts", "accompagnement", false, 280);
-        insertProduit("Chips Maison", "accompagnement", false, 300);
-        insertProduit("Onion Rings", "accompagnement", false, 320);
+        insertProduit("Salade Verte", "accompagnement", 0, 200);
+        insertProduit("Légumes Grillés", "accompagnement", 0, 400);
+        insertProduit("Purée de Pommes de Terre", "accompagnement", 0, 300);
+        insertProduit("Pommes de Terre Sautées", "accompagnement", 0, 350);
+        insertProduit("Gratin Dauphinois", "accompagnement", 0, 450);
+        insertProduit("Haricots Verts", "accompagnement", 0, 280);
+        insertProduit("Chips Maison", "accompagnement", 0, 300);
+        insertProduit("Onion Rings", "accompagnement", 0, 320);
     }
 
     // Supprime toutes les données d'une table
@@ -341,7 +341,7 @@ public class DBAdapter {
                 values.put(KEY_IDPRODUIT, jsonObject.getInt("idProduit"));
                 values.put(KEY_NOMPRODUIT, jsonObject.getString("nomProduit"));
                 values.put(KEY_CATEGORIE, jsonObject.getString("categorie"));
-                values.put(KEY_CUISSON, Boolean.valueOf(String.valueOf(jsonObject.getInt("cuisson"))));
+                values.put(KEY_CUISSON, jsonObject.getInt("cuisson"));
                 values.put(KEY_PRIX, jsonObject.getDouble("prix"));
                 db.insert(TABLE_PRODUIT, null, values);
                 break;

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -17,11 +18,12 @@ import com.pauline.dm.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class FragmentConvive extends Fragments {
     private View view;
     private static final int MAX_CHOIX = 25;
-    private static final String TAG = "FragmentConvive";
+    private static final String TAG = "DMProjet";
 
     private ArrayAdapter<String> adapterPlats;
     private ArrayAdapter<String> adapterAccompagnements;
@@ -36,6 +38,9 @@ public class FragmentConvive extends Fragments {
     private LinearLayout containerBoissons;
 
     private ConviveCommande conviveCommande;
+
+    private final String[] optionsCuisson = {"Bleu", "Saignant", "À Point", "Bien Cuit"};
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -139,7 +144,40 @@ public class FragmentConvive extends Fragments {
         commandeLayout.addView(choixEditText);
         commandeLayout.addView(quantiteEditText);
 
+        CheckBox cuissonCheckBox = new CheckBox(getContext());
+        cuissonCheckBox.setText("Sélectionnez la cuisson");
+        cuissonCheckBox.setVisibility(View.GONE);
+        commandeLayout.addView(cuissonCheckBox);
+
         container.addView(commandeLayout);
+
+        //utilisation de ça pour faire apparaitre checkbox
+        choixEditText.setOnItemClickListener((parent, view, position, id) -> {
+            String choix = choixEditText.getText().toString();
+            String quantiteStr = quantiteEditText.getText().toString();
+            int quantite = quantiteStr.isEmpty() ? 1 : Integer.parseInt(quantiteStr);
+
+            Toast.makeText(getContext(), type + " ajouté : " + choix + " (" + quantite + ")", Toast.LENGTH_SHORT).show();
+
+            String cuisson = "0";
+
+            // Vérifiez si le choix nécessite une cuisson
+            if (type.equals("Plat") && mapPlats.containsKey(choix)) {
+                Log.d(TAG, "ajouterCommande: je vérifie plat");
+                cuisson = mapPlats.get(choix);
+            } else if (type.equals("Accompagnement") && mapAccompagnements.containsKey(choix)) {
+                cuisson = mapAccompagnements.get(choix);
+            }
+
+            Log.d(TAG, "ajouterCommande: cuisson = " + cuisson);
+            // Afficher ou cacher les CheckBox en fonction de la valeur de cuisson
+            if (Objects.equals(cuisson, "1")) {
+                cuissonCheckBox.setVisibility(View.VISIBLE);
+                Toast.makeText(getContext(), "Sélectionnez la cuisson pour : " + choix, Toast.LENGTH_SHORT).show();
+            } else {
+                cuissonCheckBox.setVisibility(View.GONE);
+            }
+        });
     }
 
     public void remplirConviveCommandeDepuisUI() {
