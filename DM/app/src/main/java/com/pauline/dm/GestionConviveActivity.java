@@ -65,6 +65,7 @@ public class GestionConviveActivity extends AppCompatActivity {
                 commandeTable = new ConviveCommande();
                 adapter.clearFragments();
                 setupFragments();
+                viewPager.setOffscreenPageLimit(nbConvives+1);
                 Toast.makeText(this, nbConvives + " convives ajoutés.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Nombre de convives invalide ou trop élevé.", Toast.LENGTH_SHORT).show();
@@ -108,7 +109,7 @@ public class GestionConviveActivity extends AppCompatActivity {
     private void validerCommande() {
 
         sauvegarderConviveActuel();
-        
+
         if (conviveCommandes.isEmpty() || commandeTable == null) {
             Toast.makeText(this, "Veuillez d'abord confirmer le nombre de convives.", Toast.LENGTH_SHORT).show();
             return;
@@ -119,6 +120,8 @@ public class GestionConviveActivity extends AppCompatActivity {
             Toast.makeText(this, "Convive " + (i + 1) + " : " + commande, Toast.LENGTH_SHORT).show();
         }
 
+        FragmentPartage fragmentPartage = (FragmentPartage) adapter.getItem(adapter.getCount() - 1);
+        ConviveCommande commandeTable = fragmentPartage.getConviveCommande();
         Toast.makeText(this, "Commande Table : " + commandeTable, Toast.LENGTH_SHORT).show();
 
         processusValidation();

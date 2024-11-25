@@ -41,7 +41,6 @@ public class FragmentConvive extends Fragments {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        // Remplir ConviveCommande avant de la sauvegarder
         remplirConviveCommandeDepuisUI();
         outState.putSerializable("conviveCommande", conviveCommande);
     }
@@ -50,7 +49,6 @@ public class FragmentConvive extends Fragments {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Restaurer l'état du fragment
         if (savedInstanceState != null) {
             conviveCommande = (ConviveCommande) savedInstanceState.getSerializable("conviveCommande");
         } else {
@@ -62,17 +60,14 @@ public class FragmentConvive extends Fragments {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_convive, container, false);
 
-        // Initialisation des conteneurs
         containerPlats = view.findViewById(R.id.containerPlats);
         containerAccompagnements = view.findViewById(R.id.containerAccompagnements);
         containerBoissons = view.findViewById(R.id.containerBoissons);
 
-        // Initialisation des adapters
         adapterPlats = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listePlats);
         adapterAccompagnements = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listeAccompagnements);
         adapterBoissons = new ArrayAdapter<>(requireContext(), android.R.layout.simple_dropdown_item_1line, listeBoissons);
 
-        // Initialisation des boutons
         ajouterPlatButton = view.findViewById(R.id.ajouterPlatButton);
         ajouterAccompagnementButton = view.findViewById(R.id.ajouterAccompagnementButton);
         ajouterBoissonButton = view.findViewById(R.id.ajouterBoissonButton);
@@ -81,13 +76,12 @@ public class FragmentConvive extends Fragments {
         ajouterAccompagnementButton.setOnClickListener(v -> ajouterCommande(containerAccompagnements, "Accompagnement", adapterAccompagnements));
         ajouterBoissonButton.setOnClickListener(v -> ajouterCommande(containerBoissons, "Boisson", adapterBoissons));
 
-        // Restaurer l'état du fragment si nécessaire
         restaurerEtatConviveCommande();
 
         return view;
     }
 
-    private void restaurerEtatConviveCommande() {
+    public void restaurerEtatConviveCommande() {
         if (conviveCommande == null) return;
 
         restaurerCommandes(containerPlats, "Plat", conviveCommande.get_plats(), conviveCommande.get_quantitesPlats(), adapterPlats);
@@ -95,21 +89,21 @@ public class FragmentConvive extends Fragments {
         restaurerCommandes(containerBoissons, "Boisson", conviveCommande.get_boissons(), conviveCommande.get_quantitesBoissons(), adapterBoissons);
     }
 
-    private void restaurerCommandes(LinearLayout container, String type, List<String> choixList, List<Integer> quantitesList, ArrayAdapter<String> adapter) {
+    public void restaurerCommandes(LinearLayout container, String type, List<String> choixList, List<Integer> quantitesList, ArrayAdapter<String> adapter) {
         for (int i = 0; i < choixList.size(); i++) {
             ajouterCommandeDepuisEtat(container, type, choixList.get(i), quantitesList.get(i), adapter);
         }
     }
 
-    private void ajouterCommandeDepuisEtat(LinearLayout container, String type, String choix, int quantite, ArrayAdapter<String> adapter) {
+    public void ajouterCommandeDepuisEtat(LinearLayout container, String type, String choix, int quantite, ArrayAdapter<String> adapter) {
         ajouterCommande(container, type, adapter, choix, quantite);
     }
 
-    private void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter) {
+    public void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter) {
         ajouterCommande(container, type, adapter, "", 1);
     }
 
-    private void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter, String choixInitial, int quantiteInitial) {
+    public void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter, String choixInitial, int quantiteInitial) {
         if (container.getChildCount() >= MAX_CHOIX) {
             Toast.makeText(getContext(), "Vous ne pouvez ajouter que " + MAX_CHOIX + " " + type + "s.", Toast.LENGTH_SHORT).show();
             return;
@@ -160,10 +154,10 @@ public class FragmentConvive extends Fragments {
         conviveCommande.set_boissons(extraireCommandes(containerBoissons));
         conviveCommande.set_quantitesBoissons(extraireQuantites(containerBoissons));
 
-        afficherRecapitulatif();
+        //afficherRecapitulatif();
     }
 
-    private List<String> extraireCommandes(LinearLayout container) {
+    public List<String> extraireCommandes(LinearLayout container) {
         List<String> commandes = new ArrayList<>();
         for (int i = 0; i < container.getChildCount(); i++) {
             View commandeView = container.getChildAt(i);
@@ -175,7 +169,7 @@ public class FragmentConvive extends Fragments {
         return commandes;
     }
 
-    private List<Integer> extraireQuantites(LinearLayout container) {
+    public List<Integer> extraireQuantites(LinearLayout container) {
         List<Integer> quantites = new ArrayList<>();
         for (int i = 0; i < container.getChildCount(); i++) {
             View commandeView = container.getChildAt(i);
@@ -188,7 +182,7 @@ public class FragmentConvive extends Fragments {
     }
 
 
-    private void afficherRecapitulatif() {
+    /*private void afficherRecapitulatif() {
         StringBuilder recap = new StringBuilder("Récapitulatif des commandes :\n");
 
         recap.append("Plats : ").append(conviveCommande.get_plats()).append("\n");
@@ -196,10 +190,94 @@ public class FragmentConvive extends Fragments {
         recap.append("Boissons : ").append(conviveCommande.get_boissons()).append("\n");
 
         Toast.makeText(getContext(), recap.toString(), Toast.LENGTH_LONG).show();
-    }
+    }*/
 
     public ConviveCommande getConviveCommande() {
         remplirConviveCommandeDepuisUI();
         return conviveCommande;
+    }
+
+    public View getViewFragment() {
+        return view;
+    }
+
+    public void setViewFragment(View view) {
+        this.view = view;
+    }
+
+    public ArrayAdapter<String> getAdapterPlats() {
+        return adapterPlats;
+    }
+
+    public void setAdapterPlats(ArrayAdapter<String> adapterPlats) {
+        this.adapterPlats = adapterPlats;
+    }
+
+    public ArrayAdapter<String> getAdapterAccompagnements() {
+        return adapterAccompagnements;
+    }
+
+    public void setAdapterAccompagnements(ArrayAdapter<String> adapterAccompagnements) {
+        this.adapterAccompagnements = adapterAccompagnements;
+    }
+
+    public ArrayAdapter<String> getAdapterBoissons() {
+        return adapterBoissons;
+    }
+
+    public void setAdapterBoissons(ArrayAdapter<String> adapterBoissons) {
+        this.adapterBoissons = adapterBoissons;
+    }
+
+    public Button getAjouterPlatButton() {
+        return ajouterPlatButton;
+    }
+
+    public void setAjouterPlatButton(Button ajouterPlatButton) {
+        this.ajouterPlatButton = ajouterPlatButton;
+    }
+
+    public Button getAjouterAccompagnementButton() {
+        return ajouterAccompagnementButton;
+    }
+
+    public void setAjouterAccompagnementButton(Button ajouterAccompagnementButton) {
+        this.ajouterAccompagnementButton = ajouterAccompagnementButton;
+    }
+
+    public Button getAjouterBoissonButton() {
+        return ajouterBoissonButton;
+    }
+
+    public void setAjouterBoissonButton(Button ajouterBoissonButton) {
+        this.ajouterBoissonButton = ajouterBoissonButton;
+    }
+
+    public LinearLayout getContainerPlats() {
+        return containerPlats;
+    }
+
+    public void setContainerPlats(LinearLayout containerPlats) {
+        this.containerPlats = containerPlats;
+    }
+
+    public LinearLayout getContainerAccompagnements() {
+        return containerAccompagnements;
+    }
+
+    public void setContainerAccompagnements(LinearLayout containerAccompagnements) {
+        this.containerAccompagnements = containerAccompagnements;
+    }
+
+    public LinearLayout getContainerBoissons() {
+        return containerBoissons;
+    }
+
+    public void setContainerBoissons(LinearLayout containerBoissons) {
+        this.containerBoissons = containerBoissons;
+    }
+
+    public void setConviveCommande(ConviveCommande conviveCommande) {
+        this.conviveCommande = conviveCommande;
     }
 }
