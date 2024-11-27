@@ -520,6 +520,33 @@ import java.util.Objects;
 
             container.addView(commandeLayout);
 
+            // Récupérer la cuisson enregistrée
+            String cuissonEnregistree = null;
+            int indexPlat = conviveCommande.get_plats().indexOf(choixInitial);
+            if (indexPlat >= 0 && indexPlat < conviveCommande.getCuissonsPlats().size()) {
+                cuissonEnregistree = conviveCommande.getCuissonsPlats().get(indexPlat);
+            }
+
+            // Vérifier si la cuisson est nécessaire
+            String cuisson = mapPlats.getOrDefault(choixInitial, "0"); // "1" pour les plats nécessitant une cuisson
+
+            if (Objects.equals(cuisson, "1")) {
+                cuissonLayout.setVisibility(View.VISIBLE);
+                afficherOptionsCuisson(cuissonLayout, conviveCommande, cuissonEnregistree);
+            }
+
+            choixEditText.setOnItemClickListener((parent, view, position, id) -> {
+                String choix = choixEditText.getText().toString();
+                String cuissonOption = mapPlats.getOrDefault(choix, "0");
+
+                if (Objects.equals(cuissonOption, "1")) {
+                    cuissonLayout.setVisibility(View.VISIBLE);
+                    afficherOptionsCuisson(cuissonLayout, conviveCommande, null);
+                } else {
+                    cuissonLayout.setVisibility(View.GONE);
+                }
+            });
+            /*
             choixEditText.setOnItemClickListener((parent, view, position, id) -> {
                 String choix = choixEditText.getText().toString();
                 String cuisson = mapPlats.getOrDefault(choix, "0");
@@ -530,7 +557,7 @@ import java.util.Objects;
                 } else {
                     cuissonLayout.setVisibility(View.GONE);
                 }
-            });
+            });*/
         }
 
 

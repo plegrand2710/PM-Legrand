@@ -44,11 +44,11 @@ public class ConviveCommande implements Serializable {
         this.quantitesPlats = quantitesPlats;
     }
 
-    public List<String> get_cuissonsPlats() {
+    public List<String> getCuissonsPlats() {
         return cuissonsPlats;
     }
 
-    public void set_cuissonsPlats(List<String> cuissonsPlats) {
+    public void setCuissonsPlats(List<String> cuissonsPlats) {
         this.cuissonsPlats = cuissonsPlats;
     }
 
@@ -90,8 +90,29 @@ public class ConviveCommande implements Serializable {
 
     @Override
     public String toString() {
-        return "Plats: " + plats + " (Quantités: " + quantitesPlats + ")\n" +
-                "Accompagnements: " + accompagnements + " (Quantités: " + quantitesAccompagnements + ")\n" +
-                "Boissons: " + boissons + " (Quantités: " + quantitesBoissons + ")";
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("Plats: \n");
+        for (int i = 0; i < plats.size(); i++) {
+            sb.append("  - ").append(plats.get(i));
+            if (i < cuissonsPlats.size() && cuissonsPlats.get(i) != null && !cuissonsPlats.get(i).isEmpty()) {
+                sb.append(" (Cuisson: ").append(cuissonsPlats.get(i)).append(")");
+            }
+            sb.append(" (Quantité: ").append(quantitesPlats.get(i)).append(")\n");
+        }
+
+        sb.append("Accompagnements: \n");
+        for (int i = 0; i < accompagnements.size(); i++) {
+            sb.append("  - ").append(accompagnements.get(i));
+            sb.append(" (Quantité: ").append(quantitesAccompagnements.get(i)).append(")\n");
+        }
+
+        sb.append("Boissons: \n");
+        for (int i = 0; i < boissons.size(); i++) {
+            sb.append("  - ").append(boissons.get(i));
+            sb.append(" (Quantité: ").append(quantitesBoissons.get(i)).append(")\n");
+        }
+
+        return sb.toString();
     }
 }

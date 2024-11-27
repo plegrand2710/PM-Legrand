@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
@@ -54,6 +57,14 @@ public class GestionConviveActivity extends AppCompatActivity {
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
+        if (getIntent().hasExtra("nbConvives")) {
+            nbConvives = getIntent().getIntExtra("nbConvives", 0);
+            etNum.setText(String.valueOf(nbConvives));
+            setupFragments();
+            remplacerBoutonConfirmer();
+        }
+
+
         boutNbConvive.setOnClickListener(v -> ajouterConvives());
 
         btnValiderCommande.setOnClickListener(v -> validerCommande());
@@ -64,8 +75,6 @@ public class GestionConviveActivity extends AppCompatActivity {
         try {
             int nouveauNombre = Integer.parseInt(etNum.getText().toString());
             if (nouveauNombre > 0 && nouveauNombre <= nbConvivesMax) {
-                //sauvegarderConviveActuel();
-
                 nbConvives = nouveauNombre;
 
                 commandeTable = new ConviveCommande();
@@ -74,6 +83,8 @@ public class GestionConviveActivity extends AppCompatActivity {
 
                 setupFragments();
                 viewPager.setOffscreenPageLimit(nbConvives + 1);
+
+                remplacerBoutonConfirmer();
                 Toast.makeText(this, nbConvives + " convives ajoutés.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Nombre de convives invalide ou trop élevé.", Toast.LENGTH_SHORT).show();
@@ -82,6 +93,57 @@ public class GestionConviveActivity extends AppCompatActivity {
             Toast.makeText(this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private void remplacerBoutonConfirmer() {
+        LinearLayout boutonContainer = findViewById(R.id.bouton_container);
+
+        if (boutonContainer == null) {
+            Log.e(TAG, "remplacerBoutonConfirmer: Conteneur 'bouton_container' introuvable.");
+            return;
+        }
+
+        // Supprimer les vues existantes (y compris le bouton "Confirmer")
+        boutonContainer.removeAllViews();
+
+        // Créer un nouveau bouton
+        Button btnMettreAJour = new Button(this);
+        btnMettreAJour.setId(View.generateViewId());
+        btnMettreAJour.setText("Mettre à jour le nombre de convives");
+        btnMettreAJour.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        // Définir l'action pour relancer l'activité
+        btnMettreAJour.setOnClickListener(v -> relancerActiviteAvecNombreConvives());
+
+        // Ajouter le bouton au conteneur
+        boutonContainer.addView(btnMettreAJour);
+        Log.d(TAG, "remplacerBoutonConfirmer: Bouton 'Mettre à jour' ajouté.");
+    }
+
+
+
+
+
+    private void relancerActiviteAvecNombreConvives() {
+        try {
+            int nouveauNombre = Integer.parseInt(etNum.getText().toString());
+            if (nouveauNombre > 0 && nouveauNombre <= nbConvivesMax) {
+                // Relancer l'activité avec l'intention mise à jour
+                Intent intent = new Intent(this, GestionConviveActivity.class);
+                intent.putExtra("nbConvives", nouveauNombre);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                finish();
+                startActivity(intent);
+            } else {
+                Toast.makeText(this, "Nombre de convives invalide ou trop élevé.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Veuillez entrer un nombre valide.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void setupFragments() {
         for (int i = 0; i < nbConvives; i++) {
@@ -197,7 +259,7 @@ public class GestionConviveActivity extends AppCompatActivity {
         }).start();
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
         private final List<Fragment> fragmentList = new ArrayList<>();
         private final List<String> fragmentTitleList = new ArrayList<>();
 

@@ -242,6 +242,51 @@ public abstract class Fragments extends Fragment {
         return produitsAvecCuisson;
     }
 
+    public void afficherOptionsCuisson(LinearLayout container, ConviveCommande cc, @Nullable String cuissonEnregistree) {
+        container.removeAllViews();
+        String[] niveauxCuisson = {
+                "Extra-bleu (Extra-rare)",
+                "Bleu (Rare)",
+                "Saignant (Medium rare)",
+                "A point (Medium)",
+                "Cuit (Medium well)",
+                "Très cuit (Well done)"
+        };
+
+        RadioGroup radioGroup = new RadioGroup(getContext());
+        radioGroup.setOrientation(RadioGroup.VERTICAL);
+
+        for (String niveau : niveauxCuisson) {
+            RadioButton radioButton = new RadioButton(getContext());
+            radioButton.setText(niveau);
+            radioButton.setTextSize(16);
+            radioButton.setPadding(10, 10, 10, 10);
+
+            // Cocher si la cuisson correspond à la cuisson enregistrée
+            if (niveau.equals(cuissonEnregistree)) {
+                radioButton.setChecked(true);
+            }
+
+            radioGroup.addView(radioButton);
+        }
+
+        container.addView(radioGroup);
+
+        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton selectedRadioButton = container.findViewById(checkedId);
+            if (selectedRadioButton != null) {
+                String cuissonChoisie = selectedRadioButton.getText().toString();
+                Toast.makeText(getContext(), "Cuisson choisie : " + cuissonChoisie, Toast.LENGTH_SHORT).show();
+                // Mettre à jour la cuisson pour le plat actuel
+                int indexPlat = cc.get_plats().indexOf(selectedRadioButton.getText().toString());
+                if (indexPlat >= 0) {
+                    cc.getCuissonsPlats().set(indexPlat, cuissonChoisie);
+                }
+            }
+        });
+    }
+
+
     public void afficherOptionsCuisson(LinearLayout container, ConviveCommande cc) {
         container.removeAllViews();
         String[] niveauxCuisson = {
