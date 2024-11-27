@@ -7,7 +7,6 @@ import java.util.List;
 public class ConviveCommande implements Serializable {
     private List<String> plats = new ArrayList<>();
     private List<Integer> quantitesPlats = new ArrayList<>();
-    private List<String> cuissonsPlats = new ArrayList<>();
     private List<String> accompagnements = new ArrayList<>();
     private List<Integer> quantitesAccompagnements = new ArrayList<>();
     private List<String> boissons = new ArrayList<>();
@@ -42,18 +41,6 @@ public class ConviveCommande implements Serializable {
 
     public void set_quantitesPlats(List<Integer> quantitesPlats) {
         this.quantitesPlats = quantitesPlats;
-    }
-
-    public List<String> get_cuissonsPlats() {
-        return cuissonsPlats;
-    }
-
-    public void set_cuissonsPlats(List<String> cuissonsPlats) {
-        this.cuissonsPlats = cuissonsPlats;
-    }
-
-    public void set_cuissonsPlats(String cuissonsPlats) {
-        this.cuissonsPlats.add(cuissonsPlats);
     }
 
     public List<String> get_accompagnements() {

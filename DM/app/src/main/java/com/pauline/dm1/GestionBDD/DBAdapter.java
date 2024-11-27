@@ -1,0 +1,385 @@
+package com.pauline.dm.GestionBDD;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class DBAdapter {
+    private static final String[] TABLES = {"utilisateurs", "tables", "produit", "commande", "contient"};
+    static final String TABLE_UTILISATEURS = "utilisateurs";
+    static final String KEY_IDUTILISATEUR = "idUtilisateur";
+    static final String KEY_IDENTIFIANT = "identifiant";
+    static final String KEY_MDP = "mdp";
+    static final String KEY_ROLE = "role";
+    static final String CREATE_TABLE_UTILISATEURS =
+            "CREATE TABLE " + TABLE_UTILISATEURS + " (" +
+                    KEY_IDUTILISATEUR + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_IDENTIFIANT + " TEXT UNIQUE NOT NULL, " +
+                    KEY_MDP + " TEXT NOT NULL, " +
+                    KEY_ROLE + " TEXT CHECK(" + KEY_ROLE + " IN ('Superviseur', 'Responsable', 'Serveur', 'Cuisinier')) NOT NULL);";
+
+    static final String TABLE_TABLES = "tables";
+    static final String KEY_NUMTABLE = "numTable";
+    public static final String KEY_NBCONVIVES = "nbConvives";
+    static final String KEY_NBCOLONNE = "numColonne";
+    static final String KEY_NBLIGNE = "numLigne";
+    static final String CREATE_TABLE_TABLES =
+            "CREATE TABLE " + TABLE_TABLES + " (" +
+                    KEY_NUMTABLE + " INTEGER PRIMARY KEY, " +
+                    KEY_NBCONVIVES + " INTEGER DEFAULT 0, " +
+                    KEY_NBCOLONNE + " INTEGER NOT NULL, " +
+                    KEY_NBLIGNE + " INTEGER NOT NULL);";
+
+    static final String TABLE_PRODUIT = "produit";
+    static final String KEY_IDPRODUIT = "idProduit";
+    public static final String KEY_NOMPRODUIT = "nomProduit";
+    public static final String KEY_CUISSON = "cuisson";
+    static final String KEY_CATEGORIE = "categorie";
+    static final String KEY_PRIX = "prix";
+    static final String CREATE_TABLE_PRODUIT =
+            "CREATE TABLE " + TABLE_PRODUIT + " (" +
+                    KEY_IDPRODUIT + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_NOMPRODUIT + " TEXT NOT NULL, " +
+                    KEY_CATEGORIE + " TEXT CHECK(" + KEY_CATEGORIE + " IN ('plat', 'boisson', 'accompagnement')) NOT NULL, " +
+                    KEY_CUISSON + " INTEGER NOT NULL, " +
+                    KEY_PRIX + " REAL NOT NULL);";
+
+    static final String TABLE_COMMANDE = "commande";
+    static final String KEY_IDCOMMANDE = "idCommande";
+    static final String KEY_STATUS = "status";
+    static final String KEY_CUISSON_COMMANDE = "cuisson_Commande";
+    static final String KEY_NUMTABLE_FK = "numTable";
+    static final String CREATE_TABLE_COMMANDE =
+            "CREATE TABLE " + TABLE_COMMANDE + " (" +
+                    KEY_IDCOMMANDE + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    KEY_STATUS + " TEXT CHECK(" + KEY_STATUS + " IN ('en cours', 'réglée')) DEFAULT 'en cours', " +
+                    KEY_CUISSON_COMMANDE + " TEXT CHECK(" + KEY_CUISSON_COMMANDE + " IN ('0', '1', '2', '3', '4')) DEFAULT '0' NOT NULL, " +
+                    KEY_NUMTABLE_FK + " INTEGER, " +
+                    "FOREIGN KEY (" + KEY_NUMTABLE_FK + ") REFERENCES " + TABLE_TABLES + "(" + KEY_NUMTABLE + ") ON DELETE SET NULL);";
+
+    static final String TABLE_CONTIENT = "contient";
+    static final String KEY_IDCOMMANDE_FK = "idCommande";
+    static final String KEY_IDPRODUIT_FK = "idProduit";
+    static final String KEY_QUANTITE = "quantite";
+    static final String KEY_TRAITEMENT_CONTIENT = "traitement_contient";
+    static final String CREATE_TABLE_CONTIENT =
+            "CREATE TABLE " + TABLE_CONTIENT + " (" +
+                    KEY_IDCOMMANDE_FK + " INTEGER, " +
+                    KEY_IDPRODUIT_FK + " INTEGER, " +
+                    KEY_QUANTITE + " INTEGER NOT NULL, " +
+                    KEY_TRAITEMENT_CONTIENT + " TEXT CHECK(" + KEY_TRAITEMENT_CONTIENT + " IN ('à préparer', 'en cours', 'terminé')), " +
+                    "PRIMARY KEY (" + KEY_IDCOMMANDE_FK + ", " + KEY_IDPRODUIT_FK + "), " +
+                    "FOREIGN KEY (" + KEY_IDCOMMANDE_FK + ") REFERENCES " + TABLE_COMMANDE + "(" + KEY_IDCOMMANDE + ") ON DELETE CASCADE, " +
+                    "FOREIGN KEY (" + KEY_IDPRODUIT_FK + ") REFERENCES " + TABLE_PRODUIT + "(" + KEY_IDPRODUIT + ") ON DELETE CASCADE);";
+
+
+    static final String TAG = "DMProjet";
+    static final String DATABASE_NAME = "MyDB";
+    static final int DATABASE_VERSION = 1;
+    final Context context;
+    DatabaseHelper DBHelper;
+    SQLiteDatabase db;
+
+    public DBAdapter(Context ctx) {
+        this.context = ctx;
+        DBHelper = new DatabaseHelper(context);
+    }
+
+    private static class DatabaseHelper extends SQLiteOpenHelper {
+        DatabaseHelper(Context context) {
+            super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            try {
+                db.execSQL(CREATE_TABLE_UTILISATEURS);
+                db.execSQL(CREATE_TABLE_TABLES);
+                db.execSQL(CREATE_TABLE_PRODUIT);
+                db.execSQL(CREATE_TABLE_COMMANDE);
+                db.execSQL(CREATE_TABLE_CONTIENT);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
+                    + newVersion + ", which will destroy all old data");
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_UTILISATEURS);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_TABLES);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUIT);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMANDE);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTIENT);
+            onCreate(db);
+        }
+    }
+
+    public DBAdapter open() throws SQLException {
+        db = DBHelper.getWritableDatabase();
+        return this;
+    }
+
+    public void close() {
+        DBHelper.close();
+    }
+
+    public long insertUtilisateur(String identifiant, String mdp, String role) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDENTIFIANT, identifiant);
+        values.put(DBAdapter.KEY_MDP, mdp);
+        values.put(DBAdapter.KEY_ROLE, role);
+        return db.insert(DBAdapter.TABLE_UTILISATEURS, null, values);
+    }
+
+    public long insertUtilisateur(Integer idUtilisateur, String identifiant, String mdp, String role) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDUTILISATEUR, idUtilisateur);
+        values.put(KEY_IDENTIFIANT, identifiant);
+        values.put(DBAdapter.KEY_MDP, mdp);
+        values.put(DBAdapter.KEY_ROLE, role);
+        return db.insert(DBAdapter.TABLE_UTILISATEURS, null, values);
+    }
+
+    public Cursor getUtilisateur(String identifiant) {
+        return db.query(DBAdapter.TABLE_UTILISATEURS, null, DBAdapter.KEY_IDENTIFIANT + "=?", new String[]{identifiant}, null, null, null);
+    }
+
+    public int updateUtilisateur(int idUtilisateur, String identifiant, String mdp, String role) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDENTIFIANT, identifiant);
+        values.put(KEY_MDP, mdp);
+        values.put(KEY_ROLE, role);
+        return db.update(TABLE_UTILISATEURS, values, KEY_IDUTILISATEUR + "=?", new String[]{String.valueOf(idUtilisateur)});
+    }
+
+    public int deleteUtilisateur(int idUtilisateur) {
+        return db.delete(TABLE_UTILISATEURS, KEY_IDUTILISATEUR + "=?", new String[]{String.valueOf(idUtilisateur)});
+    }
+
+    public long insertTable(int numTable, int nbConvives, int nbColonne, int nbLigne) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_NUMTABLE, numTable);
+        values.put(KEY_NBCONVIVES, nbConvives);
+        values.put(KEY_NBCOLONNE, nbColonne);
+        values.put(KEY_NBLIGNE, nbLigne);
+        return db.insert(TABLE_TABLES, null, values);
+    }
+
+    public Cursor getTable(int numTable) {
+        return db.query(TABLE_TABLES, null, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)}, null, null, null);
+    }
+
+    public int updateTable(int numTable, int nbConvives, int nbColonne, int nbLigne) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_NBCONVIVES, nbConvives);
+        values.put(KEY_NBCOLONNE, nbColonne);
+        values.put(KEY_NBLIGNE, nbLigne);
+        return db.update(TABLE_TABLES, values, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
+    }
+
+    public int deleteTable(int numTable) {
+        return db.delete(TABLE_TABLES, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
+    }
+
+    public long insertProduit(String nomProduit, String categorie, int cuisson, double prix) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_NOMPRODUIT, nomProduit);
+        values.put(KEY_CATEGORIE, categorie);
+        values.put(KEY_CUISSON, cuisson);
+        values.put(KEY_PRIX, prix);
+        return db.insert(TABLE_PRODUIT, null, values);
+    }
+
+    public long insertProduit(Integer idProduit, String nomProduit, String categorie, int cuisson, double prix) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDPRODUIT, idProduit);
+        values.put(KEY_NOMPRODUIT, nomProduit);
+        values.put(KEY_CATEGORIE, categorie);
+        values.put(KEY_CUISSON, cuisson);
+        values.put(KEY_PRIX, prix);
+        Log.d(TAG, "insertProduit: insertion en cours");
+        return db.insert(TABLE_PRODUIT, null, values);
+    }
+
+    public Cursor getProduit(int idProduit) {
+        return db.query(TABLE_PRODUIT, null, KEY_IDPRODUIT + "=?", new String[]{String.valueOf(idProduit)}, null, null, null);
+    }
+
+    public Cursor getProduitsByCategorie(String categorie) {
+        return db.query(TABLE_PRODUIT, null, KEY_CATEGORIE + "=?", new String[]{categorie}, null, null, null);
+    }
+
+    public int updateProduit(int idProduit, String nomProduit, String categorie, int cuisson, double prix) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_NOMPRODUIT, nomProduit);
+        values.put(KEY_CATEGORIE, categorie);
+        values.put(KEY_CUISSON, cuisson);
+        values.put(KEY_PRIX, prix);
+        return db.update(TABLE_PRODUIT, values, KEY_IDPRODUIT + "=?", new String[]{String.valueOf(idProduit)});
+    }
+
+    public int deleteProduit(int idProduit) {
+        return db.delete(TABLE_PRODUIT, KEY_IDPRODUIT + "=?", new String[]{String.valueOf(idProduit)});
+    }
+
+    public long insertCommande(String status, String cuisson, int numTable) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_STATUS, status);
+        values.put(KEY_CUISSON_COMMANDE, cuisson);
+        values.put(KEY_NUMTABLE_FK, numTable);
+        return db.insert(TABLE_COMMANDE, null, values);
+    }
+
+    public long insertCommande(Integer idCommande, String status, String cuisson, int numTable) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDCOMMANDE, idCommande);
+        values.put(KEY_STATUS, status);
+        values.put(KEY_CUISSON_COMMANDE, cuisson);
+        values.put(KEY_NUMTABLE_FK, numTable);
+        return db.insert(TABLE_COMMANDE, null, values);
+    }
+
+    public Cursor getCommande(int idCommande) {
+        return db.query(TABLE_COMMANDE, null, KEY_IDCOMMANDE + "=?", new String[]{String.valueOf(idCommande)}, null, null, null);
+    }
+
+    public int updateCommande(int idCommande, String status, String cuisson, int numTable) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_STATUS, status);
+        values.put(KEY_CUISSON_COMMANDE, cuisson);
+        values.put(KEY_NUMTABLE_FK, numTable);
+        return db.update(TABLE_COMMANDE, values, KEY_IDCOMMANDE + "=?", new String[]{String.valueOf(idCommande)});
+    }
+
+    public int deleteCommande(int idCommande) {
+        return db.delete(TABLE_COMMANDE, KEY_IDCOMMANDE + "=?", new String[]{String.valueOf(idCommande)});
+    }
+
+    public long insertContient(int idCommande, int idProduit, int quantite, String traitement) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDCOMMANDE_FK, idCommande);
+        values.put(KEY_IDPRODUIT_FK, idProduit);
+        values.put(KEY_QUANTITE, quantite);
+        values.put(KEY_TRAITEMENT_CONTIENT, traitement);
+        return db.insert(TABLE_CONTIENT, null, values);
+    }
+
+    public Cursor getContient(int idCommande, int idProduit) {
+        return db.query(TABLE_CONTIENT, null, KEY_IDCOMMANDE_FK + "=? AND " + KEY_IDPRODUIT_FK + "=?", new String[]{String.valueOf(idCommande), String.valueOf(idProduit)}, null, null, null);
+    }
+
+    public int updateContient(int idCommande, int idProduit, int quantite, String traitement) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_QUANTITE, quantite);
+        values.put(KEY_TRAITEMENT_CONTIENT, traitement);
+        return db.update(TABLE_CONTIENT, values, KEY_IDCOMMANDE_FK + "=? AND " + KEY_IDPRODUIT_FK + "=?", new String[]{String.valueOf(idCommande), String.valueOf(idProduit)});
+    }
+
+    public int deleteContient(int idCommande, int idProduit) {
+        return db.delete(TABLE_CONTIENT, KEY_IDCOMMANDE_FK + "=? AND " + KEY_IDPRODUIT_FK + "=?", new String[]{String.valueOf(idCommande), String.valueOf(idProduit)});
+    }
+
+    public void loadBD(){
+        insertTable(4, 4, 1, 4);
+        insertTable(8, 6, 2, 4);
+        insertTable(16, 7, 4, 4);
+        insertTable(2, 3, 1, 2);
+
+        insertProduit("Burger", "plat", 1, 1250);
+        insertProduit("Salade César", "plat", 0, 900);
+        insertProduit("Pizza Margherita", "plat", 0, 1000);
+        insertProduit("Lasagne", "plat", 0, 1350);
+        insertProduit("Pâtes Carbonara", "plat", 0, 1100);
+        insertProduit("Steak Frites", "plat", 1, 1500);
+        insertProduit("Entrecôte Frites", "plat", 1, 1800);
+        insertProduit("Poulet Rôti", "plat", 0, 1400);
+        insertProduit("Risotto aux Champignons", "plat", 0, 1200);
+        insertProduit("Tartare de Boeuf", "plat", 0, 1300);
+        insertProduit("Quiche Lorraine", "plat", 0, 850);
+
+        insertProduit("Coca-Cola", "boisson", 0, 200);
+        insertProduit("Eau Minérale", "boisson", 0, 150);
+        insertProduit("Jus d'Orange", "boisson", 0, 250);
+        insertProduit("Café Expresso", "boisson", 0, 180);
+        insertProduit("Thé Vert", "boisson", 0, 200);
+        insertProduit("Limonade", "boisson", 0, 220);
+        insertProduit("Smoothie Fraise", "boisson", 0, 300);
+        insertProduit("Vin Rouge", "boisson", 0, 500);
+        insertProduit("Vin Blanc", "boisson", 0, 500);
+        insertProduit("Bière", "boisson", 0, 350);
+
+        insertProduit("Salade Verte", "accompagnement", 0, 200);
+        insertProduit("Légumes Grillés", "accompagnement", 0, 400);
+        insertProduit("Purée de Pommes de Terre", "accompagnement", 0, 300);
+        insertProduit("Pommes de Terre Sautées", "accompagnement", 0, 350);
+        insertProduit("Gratin Dauphinois", "accompagnement", 0, 450);
+        insertProduit("Haricots Verts", "accompagnement", 0, 280);
+        insertProduit("Chips Maison", "accompagnement", 0, 300);
+        insertProduit("Onion Rings", "accompagnement", 0, 320);
+    }
+
+    // Supprime toutes les données d'une table
+    public void clearTable(String tableName) {
+        db.execSQL("DELETE FROM " + tableName);
+    }
+
+    // Insère des données depuis un objet JSON
+    public void insertFromJson(String tableName, JSONObject jsonObject) throws JSONException {
+        ContentValues values = new ContentValues();
+
+        switch (tableName) {
+            case "produit":
+                values.put(KEY_IDPRODUIT, jsonObject.getInt("idProduit"));
+                values.put(KEY_NOMPRODUIT, jsonObject.getString("nomProduit"));
+                values.put(KEY_CATEGORIE, jsonObject.getString("categorie"));
+                values.put(KEY_CUISSON, jsonObject.getInt("cuisson"));
+                values.put(KEY_PRIX, jsonObject.getDouble("prix"));
+                db.insert(TABLE_PRODUIT, null, values);
+                break;
+
+            case "commande":
+                values.put(KEY_IDCOMMANDE, jsonObject.getInt("idCommande"));
+                values.put(KEY_STATUS, jsonObject.getString("status"));
+                values.put(KEY_CUISSON_COMMANDE, jsonObject.getString("cuisson_Commande"));
+                values.put(KEY_NUMTABLE_FK, jsonObject.getInt("numTable"));
+                db.insert(TABLE_COMMANDE, null, values);
+                break;
+
+            case "utilisateurs":
+                values.put(KEY_IDUTILISATEUR, jsonObject.getInt("idUtilisateur"));
+                values.put(KEY_IDENTIFIANT, jsonObject.getString("identifiant"));
+                values.put(KEY_MDP, jsonObject.getString("mdp"));
+                values.put(KEY_ROLE, jsonObject.getString("role"));
+                db.insert(TABLE_UTILISATEURS, null, values);
+                break;
+
+            case "contient":
+                values.put(KEY_IDCOMMANDE_FK, jsonObject.getInt("idCommande"));
+                values.put(KEY_IDPRODUIT_FK, jsonObject.getInt("idProduit"));
+                values.put(KEY_QUANTITE, jsonObject.getInt("quantite"));
+                values.put(KEY_TRAITEMENT_CONTIENT, jsonObject.getString("traitement_contient"));
+                db.insert(TABLE_CONTIENT, null, values);
+                break;
+
+            case "tables":
+                values.put(KEY_NUMTABLE, jsonObject.getInt("numTable"));
+                values.put(KEY_NBCONVIVES, jsonObject.getInt("nbConvives"));
+                values.put(KEY_NBCOLONNE, jsonObject.getInt("numColonne"));
+                values.put(KEY_NBLIGNE, jsonObject.getInt("numLigne"));
+                db.insert(TABLE_TABLES, null, values);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Table inconnue : " + tableName);
+        }
+    }
+}

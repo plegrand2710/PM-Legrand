@@ -1,10 +1,8 @@
 package com.pauline.dm;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -35,7 +33,7 @@ public class GestionConviveActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPagerAdapter adapter;
     private int progressStatus = 0;
-    private static String TAG = "DMProjet";
+
     private List<ConviveCommande> conviveCommandes = new ArrayList<>();
     private ConviveCommande commandeTable = null;
     private Handler handler = new Handler();
@@ -59,21 +57,15 @@ public class GestionConviveActivity extends AppCompatActivity {
         btnValiderCommande.setOnClickListener(v -> validerCommande());
     }
 
-
     private void ajouterConvives() {
         try {
             int nouveauNombre = Integer.parseInt(etNum.getText().toString());
             if (nouveauNombre > 0 && nouveauNombre <= nbConvivesMax) {
-                //sauvegarderConviveActuel();
-
                 nbConvives = nouveauNombre;
-
                 commandeTable = new ConviveCommande();
-                conviveCommandes.clear();
                 adapter.clearFragments();
-
                 setupFragments();
-                viewPager.setOffscreenPageLimit(nbConvives + 1);
+                viewPager.setOffscreenPageLimit(nbConvives+1);
                 Toast.makeText(this, nbConvives + " convives ajoutés.", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(this, "Nombre de convives invalide ou trop élevé.", Toast.LENGTH_SHORT).show();
@@ -123,43 +115,26 @@ public class GestionConviveActivity extends AppCompatActivity {
             return;
         }
 
-        Log.d(TAG,"GestionConviveActivity : Nombre de fragments : " + adapter.getCount());
-
-        Log.d(TAG,"GestionConviveActivity: Validation de la commande : Début");
-
         for (int i = 0; i < conviveCommandes.size(); i++) {
             ConviveCommande commande = conviveCommandes.get(i);
             Toast.makeText(this, "Convive " + (i + 1) + " : " + commande, Toast.LENGTH_SHORT).show();
         }
-        Log.d(TAG,"GestionConviveActivity :Validation de la commande : Fin");
-
-        Fragment lastFragment = adapter.getItem(adapter.getCount() - 1);
-        Log.d(TAG, "validerCommande: Dernier fragment type = " + lastFragment.getClass().getSimpleName());
-
-        if (!(lastFragment instanceof FragmentPartage)) {
-            Log.d(TAG, "validerCommande: Le dernier fragment n'est pas une instance de FragmentPartage !");
-            return;
-        }
 
         FragmentPartage fragmentPartage = (FragmentPartage) adapter.getItem(adapter.getCount() - 1);
-        Log.d(TAG, "validerCommande: j'ai fais fragment partage");
         ConviveCommande commandeTable = fragmentPartage.getConviveCommande();
-        Log.d(TAG, "validerCommande: j'air écupérer la commande de la table");
         Toast.makeText(this, "Commande Table : " + commandeTable, Toast.LENGTH_SHORT).show();
-        Log.d(TAG, "validerCommande: j'affiche la commande de la table");
+
         processusValidation();
-        Log.d(TAG, "validerCommande: je valide en visuel");
+
         retournerValeursACommandeActivity();
-        Log.d(TAG, "validerCommande: je retourne la valeur à la base de donnée");
     }
 
 
     private void sauvegarderConviveActuel() {
-        Log.d(TAG, "sauvegarderConviveActuel: je sauvegarde...");
         int positionActuelle = viewPager.getCurrentItem();
         if (positionActuelle < conviveCommandes.size()) {
             FragmentConvive fragmentConvive = (FragmentConvive) adapter.getItem(positionActuelle);
-            fragmentConvive.remplirConviveCommandeDepuisUI();
+            fragmentConvive.remplirConviveCommandeDepuisUI(); // Force la sauvegarde des données
             conviveCommandes.set(positionActuelle, fragmentConvive.getConviveCommande());
         }
     }
@@ -229,11 +204,6 @@ public class GestionConviveActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             return fragmentTitleList.get(position);
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return POSITION_NONE;
         }
     }
 }
