@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.pauline.dm.ConviveCommande;
+import com.pauline.dm.ProduitCommande;
 import com.pauline.dm.R;
 
 import java.util.ArrayList;
@@ -38,9 +40,6 @@ public class FragmentConvive extends Fragments {
     private LinearLayout containerBoissons;
 
     private ConviveCommande conviveCommande;
-
-    private final String[] optionsCuisson = {"Bleu", "Saignant", "À Point", "Bien Cuit"};
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -89,34 +88,51 @@ public class FragmentConvive extends Fragments {
     public void restaurerEtatConviveCommande() {
         if (conviveCommande == null) return;
 
-        restaurerCommandes(containerPlats, "Plat", conviveCommande.get_plats(), conviveCommande.get_quantitesPlats(), adapterPlats);
-        restaurerCommandes(containerAccompagnements, "Accompagnement", conviveCommande.get_accompagnements(), conviveCommande.get_quantitesAccompagnements(), adapterAccompagnements);
-        restaurerCommandes(containerBoissons, "Boisson", conviveCommande.get_boissons(), conviveCommande.get_quantitesBoissons(), adapterBoissons);
+        restaurerCommandes(containerPlats, "Plat", conviveCommande.getPlats(), adapterPlats);
+        restaurerCommandes(containerAccompagnements, "Accompagnement", conviveCommande.getAccompagnements(), adapterAccompagnements);
+        restaurerCommandes(containerBoissons, "Boisson", conviveCommande.getBoissons(), adapterBoissons);
     }
 
-    public void restaurerCommandes(LinearLayout container, String type, List<String> choixList, List<Integer> quantitesList, ArrayAdapter<String> adapter) {
-        for (int i = 0; i < choixList.size(); i++) {
-            ajouterCommandeDepuisEtat(container, type, choixList.get(i), quantitesList.get(i), adapter);
+    public void restaurerCommandes(LinearLayout container, String type, List<ProduitCommande> choixList, ArrayAdapter<String> adapter) {
+        for (ProduitCommande produit : choixList) {
+            String nom = produit.getNom();
+            int quantite = produit.getQuantite();
+            String cuisson = produit.getCuisson();
+
+            ajouterCommandeDepuisEtat(container, type, nom, quantite, cuisson, adapter);
         }
     }
 
-    public void ajouterCommandeDepuisEtat(LinearLayout container, String type, String choix, int quantite, ArrayAdapter<String> adapter) {
-        ajouterCommande(container, type, adapter, choix, quantite);
+    public void ajouterCommandeDepuisEtat(LinearLayout container, String type, String choix, int quantite, String cuisson, ArrayAdapter<String> adapter) {
+        ajouterCommande(container, type, adapter, choix, quantite, cuisson);
     }
 
     public void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter) {
-        ajouterCommande(container, type, adapter, "", 1);
+        String cuissonParDefaut = null;
+
+        if ("Plat".equalsIgnoreCase(type) || "Accompagnement".equalsIgnoreCase(type)) {
+            cuissonParDefaut = "";
+        }
+
+        ajouterCommande(container, type, adapter, "", 1, cuissonParDefaut);
     }
 
-    public void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter, String choixInitial, int quantiteInitial) {
+    public void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter, String choixInitial, int quantiteInitial, String cuissonInitiale) {
         if (container.getChildCount() >= MAX_CHOIX) {
             Toast.makeText(getContext(), "Vous ne pouvez ajouter que " + MAX_CHOIX + " " + type + "s.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         LinearLayout commandeLayout = new LinearLayout(getContext());
-        commandeLayout.setOrientation(LinearLayout.HORIZONTAL);
+        commandeLayout.setOrientation(LinearLayout.VERTICAL);
         commandeLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        LinearLayout inputLayout = new LinearLayout(getContext());
+        inputLayout.setOrientation(LinearLayout.HORIZONTAL);
+        inputLayout.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         ));
@@ -141,69 +157,95 @@ public class FragmentConvive extends Fragments {
         quantiteEditText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
         quantiteEditText.setText(String.valueOf(quantiteInitial));
 
-        commandeLayout.addView(choixEditText);
-        commandeLayout.addView(quantiteEditText);
+        inputLayout.addView(choixEditText);
+        inputLayout.addView(quantiteEditText);
 
-        CheckBox cuissonCheckBox = new CheckBox(getContext());
-        cuissonCheckBox.setText("Sélectionnez la cuisson");
-        cuissonCheckBox.setVisibility(View.GONE);
-        commandeLayout.addView(cuissonCheckBox);
+        LinearLayout cuissonLayout = new LinearLayout(getContext());
+        cuissonLayout.setOrientation(LinearLayout.VERTICAL);
+        cuissonLayout.setVisibility(View.GONE);
+        cuissonLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+
+        commandeLayout.addView(inputLayout);
+        commandeLayout.addView(cuissonLayout);
 
         container.addView(commandeLayout);
 
-        //utilisation de ça pour faire apparaitre checkbox
+        ProduitCommande produitCommande = new ProduitCommande(choixInitial, quantiteInitial, cuissonInitiale);
+
+        if (cuissonInitiale != null && !cuissonInitiale.isEmpty()) {
+            cuissonLayout.setVisibility(View.VISIBLE);
+            afficherOptionsCuisson(cuissonLayout, produitCommande);
+        }
+
         choixEditText.setOnItemClickListener((parent, view, position, id) -> {
             String choix = choixEditText.getText().toString();
-            String quantiteStr = quantiteEditText.getText().toString();
-            int quantite = quantiteStr.isEmpty() ? 1 : Integer.parseInt(quantiteStr);
+            String cuissonOption = mapPlats.getOrDefault(choix, "0");
 
-            Toast.makeText(getContext(), type + " ajouté : " + choix + " (" + quantite + ")", Toast.LENGTH_SHORT).show();
-
-            String cuisson = "0";
-
-            // Vérifiez si le choix nécessite une cuisson
-            if (type.equals("Plat") && mapPlats.containsKey(choix)) {
-                Log.d(TAG, "ajouterCommande: je vérifie plat");
-                cuisson = mapPlats.get(choix);
-            } else if (type.equals("Accompagnement") && mapAccompagnements.containsKey(choix)) {
-                cuisson = mapAccompagnements.get(choix);
-            }
-
-            Log.d(TAG, "ajouterCommande: cuisson = " + cuisson);
-            // Afficher ou cacher les CheckBox en fonction de la valeur de cuisson
-            if (Objects.equals(cuisson, "1")) {
-                cuissonCheckBox.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), "Sélectionnez la cuisson pour : " + choix, Toast.LENGTH_SHORT).show();
+            if (Objects.equals(cuissonOption, "1")) {
+                cuissonLayout.setVisibility(View.VISIBLE);
+                afficherOptionsCuisson(cuissonLayout, produitCommande);
             } else {
-                cuissonCheckBox.setVisibility(View.GONE);
+                cuissonLayout.setVisibility(View.GONE);
+                produitCommande.setCuisson(null);
             }
         });
     }
 
+
     public void remplirConviveCommandeDepuisUI() {
-        conviveCommande = new ConviveCommande();
-
-        conviveCommande.set_plats(extraireCommandes(containerPlats));
-        conviveCommande.set_quantitesPlats(extraireQuantites(containerPlats));
-
-        conviveCommande.set_accompagnements(extraireCommandes(containerAccompagnements));
-        conviveCommande.set_quantitesAccompagnements(extraireQuantites(containerAccompagnements));
-
-        conviveCommande.set_boissons(extraireCommandes(containerBoissons));
-        conviveCommande.set_quantitesBoissons(extraireQuantites(containerBoissons));
-
-        //afficherRecapitulatif();
+        try {
+            conviveCommande.setPlats(extraireCommandes(containerPlats));
+            conviveCommande.setAccompagnements(extraireCommandes(containerAccompagnements));
+            conviveCommande.setBoissons(extraireCommandes(containerBoissons));
+        } catch (Exception e) {
+            Log.e(TAG, "Erreur lors du remplissage de la commande depuis l'interface utilisateur", e);
+            Toast.makeText(getContext(), "Erreur lors de l'extraction des données, veuillez réessayer.", Toast.LENGTH_LONG).show();
+        }
     }
 
-    public List<String> extraireCommandes(LinearLayout container) {
-        List<String> commandes = new ArrayList<>();
+
+    public List<ProduitCommande> extraireCommandes(LinearLayout container) {
+        List<ProduitCommande> commandes = new ArrayList<>();
         for (int i = 0; i < container.getChildCount(); i++) {
             View commandeView = container.getChildAt(i);
             if (commandeView instanceof LinearLayout) {
-                AutoCompleteTextView choixTextView = (AutoCompleteTextView) ((LinearLayout) commandeView).getChildAt(0);
-                commandes.add(choixTextView.getText().toString());
+                LinearLayout inputLayout = (LinearLayout) ((LinearLayout) commandeView).getChildAt(0);
+                LinearLayout cuissonLayout = (LinearLayout) ((LinearLayout) commandeView).getChildAt(1);
+
+                if (inputLayout != null) {
+                    try {
+                        AutoCompleteTextView choixTextView = (AutoCompleteTextView) inputLayout.getChildAt(0);
+                        String nom = choixTextView.getText().toString();
+
+                        EditText quantiteEditText = (EditText) inputLayout.getChildAt(1);
+                        int quantite = quantiteEditText.getText().toString().isEmpty()
+                                ? 1
+                                : Integer.parseInt(quantiteEditText.getText().toString());
+
+                        String cuisson = null;
+                        if (cuissonLayout.getVisibility() == View.VISIBLE) {
+                            RadioGroup radioGroup = (RadioGroup) cuissonLayout.getChildAt(0);
+                            int checkedId = radioGroup.getCheckedRadioButtonId();
+                            if (checkedId != -1) {
+                                RadioButton selectedRadioButton = cuissonLayout.findViewById(checkedId);
+                                cuisson = selectedRadioButton.getText().toString();
+                            }
+                        }
+                        if (!nom.isEmpty()) {
+                            commandes.add(new ProduitCommande(nom, quantite, cuisson));
+                        } else {
+                            Log.d(TAG, "Commande vide ignorée à l'index " + i);
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "Erreur lors de l'extraction de la commande à l'index " + i, e);
+                    }
+                }
             }
         }
+        Log.d(TAG, "Commandes extraites : " + commandes);
         return commandes;
     }
 
@@ -212,23 +254,25 @@ public class FragmentConvive extends Fragments {
         for (int i = 0; i < container.getChildCount(); i++) {
             View commandeView = container.getChildAt(i);
             if (commandeView instanceof LinearLayout) {
-                EditText quantiteEditText = (EditText) ((LinearLayout) commandeView).getChildAt(1);
-                quantites.add(Integer.parseInt(quantiteEditText.getText().toString()));
+                LinearLayout inputLayout = (LinearLayout) ((LinearLayout) commandeView).getChildAt(0);
+                if (inputLayout != null) {
+                    try {
+                        EditText quantiteEditText = (EditText) inputLayout.getChildAt(1);
+                        String quantiteStr = quantiteEditText.getText().toString();
+                        int quantite = quantiteStr.isEmpty() ? 1 : Integer.parseInt(quantiteStr);
+                        quantites.add(quantite);
+                    } catch (NumberFormatException e) {
+                        Log.e(TAG, "Quantité non valide à l'index " + i, e);
+                        quantites.add(1);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Erreur lors de l'extraction de la quantité à l'index " + i, e);
+                    }
+                }
             }
         }
+        Log.d(TAG, "Quantités extraites : " + quantites);
         return quantites;
     }
-
-
-    /*private void afficherRecapitulatif() {
-        StringBuilder recap = new StringBuilder("Récapitulatif des commandes :\n");
-
-        recap.append("Plats : ").append(conviveCommande.get_plats()).append("\n");
-        recap.append("Accompagnements : ").append(conviveCommande.get_accompagnements()).append("\n");
-        recap.append("Boissons : ").append(conviveCommande.get_boissons()).append("\n");
-
-        Toast.makeText(getContext(), recap.toString(), Toast.LENGTH_LONG).show();
-    }*/
 
     public ConviveCommande getConviveCommande() {
         remplirConviveCommandeDepuisUI();

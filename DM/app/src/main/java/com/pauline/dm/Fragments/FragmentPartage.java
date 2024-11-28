@@ -25,10 +25,6 @@ public class FragmentPartage extends FragmentConvive {
         outState.putSerializable("commandeTable", getConviveCommande());
     }
 
-    @Override
-    public void ajouterCommande(LinearLayout container, String type, ArrayAdapter<String> adapter, String choixInitial, int quantiteInitial) {
-        super.ajouterCommande(container, type + " partagé", adapter, choixInitial, quantiteInitial);
-    }
 
     @Override
     public void remplirConviveCommandeDepuisUI() {

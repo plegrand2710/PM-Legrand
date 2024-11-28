@@ -159,6 +159,7 @@ import androidx.fragment.app.Fragment;
 
 import com.pauline.dm.ConviveCommande;
 import com.pauline.dm.GestionBDD.DBAdapter;
+import com.pauline.dm.ProduitCommande;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -242,7 +243,7 @@ public abstract class Fragments extends Fragment {
         return produitsAvecCuisson;
     }
 
-    public void afficherOptionsCuisson(LinearLayout container, ConviveCommande cc, @Nullable String cuissonEnregistree) {
+    public void afficherOptionsCuisson(LinearLayout container, ProduitCommande produit) {
         container.removeAllViews();
         String[] niveauxCuisson = {
                 "Extra-bleu (Extra-rare)",
@@ -262,8 +263,7 @@ public abstract class Fragments extends Fragment {
             radioButton.setTextSize(16);
             radioButton.setPadding(10, 10, 10, 10);
 
-            // Cocher si la cuisson correspond à la cuisson enregistrée
-            if (niveau.equals(cuissonEnregistree)) {
+            if (niveau.equals(produit.getCuisson())) {
                 radioButton.setChecked(true);
             }
 
@@ -277,52 +277,10 @@ public abstract class Fragments extends Fragment {
             if (selectedRadioButton != null) {
                 String cuissonChoisie = selectedRadioButton.getText().toString();
                 Toast.makeText(getContext(), "Cuisson choisie : " + cuissonChoisie, Toast.LENGTH_SHORT).show();
-                // Mettre à jour la cuisson pour le plat actuel
-                int indexPlat = cc.get_plats().indexOf(selectedRadioButton.getText().toString());
-                if (indexPlat >= 0) {
-                    cc.getCuissonsPlats().set(indexPlat, cuissonChoisie);
-                }
+
+                produit.setCuisson(cuissonChoisie);
             }
         });
-    }
-
-
-    public void afficherOptionsCuisson(LinearLayout container, ConviveCommande cc) {
-        container.removeAllViews();
-        String[] niveauxCuisson = {
-                "Extra-bleu (Extra-rare)",
-                "Bleu (Rare)",
-                "Saignant (Medium rare)",
-                "A point (Medium)",
-                "Cuit (Medium well)",
-                "Très cuit (Well done)"
-        };
-        RadioGroup radioGroup = new RadioGroup(getContext());
-        radioGroup.setOrientation(RadioGroup.VERTICAL);
-
-        for (String niveau : niveauxCuisson) {
-            RadioButton radioButton = new RadioButton(getContext());
-            radioButton.setText(niveau);
-            radioButton.setTextSize(16);
-            radioButton.setPadding(10, 10, 10, 10);
-            radioGroup.addView(radioButton);
-        }
-
-        container.addView(radioGroup);
-
-        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            RadioButton selectedRadioButton = container.findViewById(checkedId);
-            if (selectedRadioButton != null) {
-                String cuissonChoisie = selectedRadioButton.getText().toString();
-                Toast.makeText(getContext(), "Cuisson choisie : " + cuissonChoisie, Toast.LENGTH_SHORT).show();
-
-                sauvegarderCuissonDansCommande(cuissonChoisie, cc);
-            }
-        });
-    }
-
-    private void sauvegarderCuissonDansCommande(String cuissonChoisie, ConviveCommande cc) {
-        cc.set_cuissonsPlats(cuissonChoisie);
     }
 
     @Override

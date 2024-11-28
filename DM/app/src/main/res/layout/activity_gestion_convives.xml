@@ -16,11 +16,20 @@
         android:inputType="number"
         android:layout_marginBottom="16dp" />
 
-    <Button
-        android:id="@+id/confirmConvivesButton"
+    <LinearLayout
+        android:id="@+id/bouton_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confirmer les convives" />
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/confirmConvivesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirmer les convives" />
+    </LinearLayout>
+
+
+
 
     <!-- TabLayout pour les onglets des convives -->
     <com.google.android.material.tabs.TabLayout
