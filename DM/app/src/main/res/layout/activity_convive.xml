@@ -15,17 +15,28 @@
         android:inputType="number"
         android:layout_marginBottom="16dp" />
 
-    <Button
-        android:id="@+id/confirmConvives"
+    <LinearLayout
+        android:id="@+id/bouton_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/valideConvive" />
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/confirmConvivesButton"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/valideConvive" />
+    </LinearLayout>
 
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayoutid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:tabTextColor="@color/color_bleuFonce"
+        app:tabSelectedTextColor="@color/color_bleuVert"
+        app:tabIndicatorColor="@color/color_vert"
         app:tabMode="scrollable" />
 
     <androidx.viewpager.widget.ViewPager
@@ -34,16 +45,16 @@
         android:layout_height="476dp" />
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <Button
             android:id="@+id/validerCommande"
+            style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/valideCommande"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="16dp"
+            android:text="@string/valideCommande" />
 
         <ProgressBar
             android:id="@+id/progressBar"

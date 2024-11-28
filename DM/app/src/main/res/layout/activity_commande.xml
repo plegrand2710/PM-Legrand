@@ -17,10 +17,10 @@
 
     <Button
         android:id="@+id/valide"
-        android:layout_width="wrap_content"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/valideNum"
-        android:backgroundTint="#A0E91E63"/>
+        android:text="@string/valideNum"/>
 
     <TextView
         android:id="@+id/choix"
@@ -36,7 +36,7 @@
         android:layout_marginTop="20dp"
         android:text="@string/selectionTable"
         android:textAllCaps="true"
-        android:textColor="#E91E63"
+        android:textColor="@color/color_bleuFonce"
         android:textSize="20sp"
         android:textStyle="bold|italic" />
 

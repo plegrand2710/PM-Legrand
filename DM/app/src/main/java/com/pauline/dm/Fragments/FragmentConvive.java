@@ -2,6 +2,7 @@ package com.pauline.dm.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import androidx.core.widget.TextViewCompat;
 
 import com.pauline.dm.ConviveCommande;
 import com.pauline.dm.ProduitCommande;
@@ -76,6 +79,7 @@ public class FragmentConvive extends Fragments {
         ajouterAccompagnementButton = view.findViewById(R.id.ajouterAccompagnementButton);
         ajouterBoissonButton = view.findViewById(R.id.ajouterBoissonButton);
 
+        TextViewCompat.setTextAppearance(ajouterBoissonButton, R.style.ButtonStyle);
         ajouterPlatButton.setOnClickListener(v -> ajouterCommande(containerPlats, "Plat", adapterPlats));
         ajouterAccompagnementButton.setOnClickListener(v -> ajouterCommande(containerAccompagnements, "Accompagnement", adapterAccompagnements));
         ajouterBoissonButton.setOnClickListener(v -> ajouterCommande(containerBoissons, "Boisson", adapterBoissons));
