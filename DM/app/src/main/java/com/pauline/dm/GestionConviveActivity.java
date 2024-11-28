@@ -111,9 +111,13 @@ public class GestionConviveActivity extends AppCompatActivity {
         TextViewCompat.setTextAppearance(nouveauBouton, R.style.ButtonStyle);
         nouveauBouton.setId(View.generateViewId());
         nouveauBouton.setText(boutonTexte);
+        int heightInDp = 40;
+        float scale = getResources().getDisplayMetrics().density;
+
+        int heightInPx = (int) (heightInDp * scale + 0.5f);
         nouveauBouton.setLayoutParams(new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
+                heightInPx
         ));
 
         nouveauBouton.setOnClickListener(action);

@@ -3,7 +3,7 @@
     <style name="Base.Theme.DM" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/color_orange</item>
-        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:fontFamily">serif</item>
     </style>
 
     <style name="Theme.DM" parent="Base.Theme.DM" />
