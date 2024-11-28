@@ -1,6 +1,7 @@
 package com.pauline.dm.Fragments;
 
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
@@ -161,6 +162,22 @@ public class FragmentConvive extends Fragments {
         quantiteEditText.setInputType(android.text.InputType.TYPE_CLASS_NUMBER);
         quantiteEditText.setText(String.valueOf(quantiteInitial));
 
+        quantiteEditText.setFilters(new InputFilter[]{
+                new InputFilter.LengthFilter(2),
+                (source, start, end, dest, dstart, dend) -> {
+                    try {
+                        String newValue = dest.toString().substring(0, dstart) + source + dest.toString().substring(dend);
+                        int input = Integer.parseInt(newValue);
+                        if (input > 20) {
+                            Toast.makeText(getContext(), "Quantité maximale: 20", Toast.LENGTH_SHORT).show();
+                            return "";
+                        }
+                    } catch (NumberFormatException e) {
+                    }
+                    return null;
+                }
+        });
+
         inputLayout.addView(choixEditText);
         inputLayout.addView(quantiteEditText);
 
@@ -229,6 +246,12 @@ public class FragmentConvive extends Fragments {
                                 ? 1
                                 : Integer.parseInt(quantiteEditText.getText().toString());
 
+                        if (quantite > 20) {
+                            quantite = 20;
+                            quantiteEditText.setText(String.valueOf(quantite));
+                            Toast.makeText(getContext(), "Quantité limitée à 20.", Toast.LENGTH_SHORT).show();
+                        }
+
                         String cuisson = null;
                         if (cuissonLayout.getVisibility() == View.VISIBLE) {
                             RadioGroup radioGroup = (RadioGroup) cuissonLayout.getChildAt(0);
@@ -251,31 +274,6 @@ public class FragmentConvive extends Fragments {
         }
         Log.d(TAG, "Commandes extraites : " + commandes);
         return commandes;
-    }
-
-    public List<Integer> extraireQuantites(LinearLayout container) {
-        List<Integer> quantites = new ArrayList<>();
-        for (int i = 0; i < container.getChildCount(); i++) {
-            View commandeView = container.getChildAt(i);
-            if (commandeView instanceof LinearLayout) {
-                LinearLayout inputLayout = (LinearLayout) ((LinearLayout) commandeView).getChildAt(0);
-                if (inputLayout != null) {
-                    try {
-                        EditText quantiteEditText = (EditText) inputLayout.getChildAt(1);
-                        String quantiteStr = quantiteEditText.getText().toString();
-                        int quantite = quantiteStr.isEmpty() ? 1 : Integer.parseInt(quantiteStr);
-                        quantites.add(quantite);
-                    } catch (NumberFormatException e) {
-                        Log.e(TAG, "Quantité non valide à l'index " + i, e);
-                        quantites.add(1);
-                    } catch (Exception e) {
-                        Log.e(TAG, "Erreur lors de l'extraction de la quantité à l'index " + i, e);
-                    }
-                }
-            }
-        }
-        Log.d(TAG, "Quantités extraites : " + quantites);
-        return quantites;
     }
 
     public ConviveCommande getConviveCommande() {
