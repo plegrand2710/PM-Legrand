@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Module Admin"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_bleuFonce"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="24dp" />
+
+    <Button
+        android:id="@+id/btnManageUsers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gérer les utilisateurs"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/color_bleuVert"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btnManageTables"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gérer les tables"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/color_bleuVert"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btnManageProducts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gérer les produits"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/color_bleuVert"
+        android:textColor="@android:color/white" />
+
+    <Button
+        android:id="@+id/btnViewOrders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Visualiser les commandes"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/color_bleuVert"
+        android:textColor="@android:color/white" />
+</LinearLayout>
