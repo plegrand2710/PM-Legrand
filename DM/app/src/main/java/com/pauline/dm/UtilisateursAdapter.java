@@ -1,23 +1,23 @@
 package com.pauline.dm;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.pauline.dm.GestionBDD.DBAdapter;
-import com.pauline.dm.R;
-import com.pauline.dm.Utilisateur;
 
 import java.util.List;
-
 public class UtilisateursAdapter extends ArrayAdapter<Utilisateur> {
     private final Context context;
     private final List<Utilisateur> users;
@@ -41,24 +41,33 @@ public class UtilisateursAdapter extends ArrayAdapter<Utilisateur> {
 
         TextView tvUsername = convertView.findViewById(R.id.tvUsername);
         TextView tvRole = convertView.findViewById(R.id.tvRole);
-        Button btnEdit = convertView.findViewById(R.id.btnEdit);
-        Button btnDelete = convertView.findViewById(R.id.btnDelete);
+        ImageView ivEdit = convertView.findViewById(R.id.ivEdit);
+        ImageView ivDelete = convertView.findViewById(R.id.ivDelete);
 
-        tvUsername.setText(user.getUsername());
+        tvUsername.setText(user.getIdentifiant());
         tvRole.setText(user.getRole());
 
-        btnEdit.setOnClickListener(v -> {
-            // Implémentez ici la logique pour ouvrir une activité ou un dialog pour modifier l'utilisateur
-            // Exemple :
-            // Intent intent = new Intent(context, EditUserActivity.class);
-            // intent.putExtra("USER_ID", user.getId());
-            // context.startActivity(intent);
+        ivEdit.setOnClickListener(v -> {
+            ModifierUtilisateurDialog dialog = new ModifierUtilisateurDialog();
+            dialog.setUserId(user.getId());
+            dialog.setListener(() -> {
+                // Actualisation des données après modification
+                users.clear();
+                users.addAll(dbAdapter.getAllUsers());
+                notifyDataSetChanged();
+            });
+            dialog.show(((AppCompatActivity) context).getSupportFragmentManager(), "EditUserDialog");
         });
 
-        btnDelete.setOnClickListener(v -> {
-            dbAdapter.deleteUtilisateur(user.getId());
-            users.remove(position);
-            notifyDataSetChanged();
+        ivDelete.setOnClickListener(v -> {
+            boolean deleted = dbAdapter.deleteUtilisateur(user.getId());
+            if (deleted) {
+                users.remove(position); // Retirer l'utilisateur de la liste
+                notifyDataSetChanged();
+                Toast.makeText(context, "Utilisateur supprimé avec succès", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Échec de la suppression de l'utilisateur", Toast.LENGTH_SHORT).show();
+            }
         });
 
         return convertView;

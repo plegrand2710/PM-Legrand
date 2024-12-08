@@ -138,12 +138,14 @@ public class DBAdapter {
         DBHelper.close();
     }
 
-    public long insertUtilisateur(String identifiant, String mdp, String role) {
+    public boolean insertUtilisateur(String username, String password, String role) {
         ContentValues values = new ContentValues();
-        values.put(KEY_IDENTIFIANT, identifiant);
-        values.put(DBAdapter.KEY_MDP, mdp);
-        values.put(DBAdapter.KEY_ROLE, role);
-        return db.insert(DBAdapter.TABLE_UTILISATEURS, null, values);
+        values.put(KEY_IDENTIFIANT, username);
+        values.put(KEY_MDP, password);
+        values.put(KEY_ROLE, role);
+
+        long result = db.insert(TABLE_UTILISATEURS, null, values);
+        return result != -1;
     }
 
     public long insertUtilisateur(Integer idUtilisateur, String identifiant, String mdp, String role) {
@@ -155,20 +157,26 @@ public class DBAdapter {
         return db.insert(DBAdapter.TABLE_UTILISATEURS, null, values);
     }
 
-    public Cursor getUtilisateur(String identifiant) {
-        return db.query(DBAdapter.TABLE_UTILISATEURS, null, DBAdapter.KEY_IDENTIFIANT + "=?", new String[]{identifiant}, null, null, null);
+    public Utilisateur getUtilisateur(int idIdentifiant) {
+        Cursor cursor = db.query(DBAdapter.TABLE_UTILISATEURS, null, DBAdapter.KEY_IDUTILISATEUR + "=?", new String[]{String.valueOf(idIdentifiant)}, null, null, null);
+        Utilisateur user = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            String username = cursor.getString(cursor.getColumnIndexOrThrow(KEY_IDENTIFIANT));
+            String password = cursor.getString(cursor.getColumnIndexOrThrow(KEY_MDP));
+            String role = cursor.getString(cursor.getColumnIndexOrThrow(KEY_ROLE));
+            user = new Utilisateur(idIdentifiant, username, password, role);
+            cursor.close();
+        }
+        return user;
     }
 
-    public int updateUtilisateur(int idUtilisateur, String identifiant, String mdp, String role) {
-        ContentValues values = new ContentValues();
-        values.put(KEY_IDENTIFIANT, identifiant);
-        values.put(KEY_MDP, mdp);
-        values.put(KEY_ROLE, role);
-        return db.update(TABLE_UTILISATEURS, values, KEY_IDUTILISATEUR + "=?", new String[]{String.valueOf(idUtilisateur)});
-    }
+    public boolean deleteUtilisateur(int userId) {
+        if (db == null || !db.isOpen()) {
+            open();
+        }
 
-    public int deleteUtilisateur(int idUtilisateur) {
-        return db.delete(TABLE_UTILISATEURS, KEY_IDUTILISATEUR + "=?", new String[]{String.valueOf(idUtilisateur)});
+        int rowsAffected = db.delete(TABLE_UTILISATEURS, KEY_IDUTILISATEUR + "=?", new String[]{String.valueOf(userId)});
+        return rowsAffected > 0;
     }
 
     public long insertTable(int numTable, int nbConvives, int nbColonne, int nbLigne) {
@@ -470,9 +478,10 @@ public class DBAdapter {
             do {
                 int id = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_IDUTILISATEUR));
                 String username = cursor.getString(cursor.getColumnIndexOrThrow(KEY_IDENTIFIANT));
+                String password = cursor.getString(cursor.getColumnIndexOrThrow(KEY_MDP));
                 String role = cursor.getString(cursor.getColumnIndexOrThrow(KEY_ROLE));
 
-                Utilisateur user = new Utilisateur(id, username, role);
+                Utilisateur user = new Utilisateur(id, username, password, role);
                 userList.add(user);
 
                 Log.d(TAG, "Utilisateur récupéré : ID=" + id + ", Nom=" + username + ", Rôle=" + role);
@@ -484,5 +493,13 @@ public class DBAdapter {
         }
 
         return userList;
+    }
+
+    public boolean updateUtilisateur(int id, String username, String password, String role) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDENTIFIANT, username);
+        values.put(KEY_MDP, password);
+        values.put(KEY_ROLE, role);
+        return db.update(TABLE_UTILISATEURS, values, KEY_IDUTILISATEUR + " = ?", new String[]{String.valueOf(id)}) > 0;
     }
 }

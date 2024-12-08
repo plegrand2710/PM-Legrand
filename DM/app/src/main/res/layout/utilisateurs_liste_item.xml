@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
@@ -24,22 +24,42 @@
         android:layout_weight="1"
         android:text="Rôle"
         android:textColor="@color/color_vert"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        android:gravity="center" />
 
-    <Button
-        android:id="@+id/btnEdit"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Modifier"
-        android:backgroundTint="@color/color_orange"
-        android:textColor="@android:color/white"
-        android:layout_marginEnd="8dp" />
+        android:padding="4dp"
+        android:background="@drawable/cercle_orange_background"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:onClick="onEditClick">
 
-    <Button
-        android:id="@+id/btnDelete"
+        <ImageView
+            android:id="@+id/ivEdit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/account_edit"
+            app:tint="@color/color_blancCasse"
+            android:contentDescription="@string/ic_edit_desc" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Supprimer"
-        android:backgroundTint="@color/color_bleuFonce"
-        android:textColor="@android:color/white" />
+        android:padding="4dp"
+        android:background="@drawable/cercle_bleu_fonce_background"
+        android:gravity="center"
+        android:onClick="onDeleteClick">
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/delete"
+            app:tint="@color/color_blancCasse"
+            android:contentDescription="@string/sauvegarderIDCo" />
+    </LinearLayout>
+
 </LinearLayout>

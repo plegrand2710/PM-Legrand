@@ -72,4 +72,14 @@
     <string name="cuisine">Module Cuisine</string>
     <string name="caisse">Module Caisse</string>
     <string name="commande">Module Commandes</string>
+    <string name="ic_edit_desc">cerle orange d\'arrière plan</string>
+    <string name="ic_delete_desc">cerle bleu fonce d\'arrière plan</string>
+    <string name="sauvegarderIDCo">Se souvenir de moi</string>
+
+    <string-array name="user_roles">
+        <item>Superviseur</item>
+        <item>Responsable</item>
+        <item>Serveur</item>
+        <item>Cuisinier</item>
+    </string-array>
 </resources>
