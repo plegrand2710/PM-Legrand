@@ -1,4 +1,4 @@
-package com.pauline.dm;
+package com.pauline.dm.Commande;
 
 
 import android.content.Intent;
@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -18,14 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
-import com.pauline.dm.Fragments.FragmentConvive;
-import com.pauline.dm.Fragments.FragmentPartage;
+import com.pauline.dm.Commande.Fragments.FragmentConvive;
+import com.pauline.dm.Commande.Fragments.FragmentPartage;
+import com.pauline.dm.R;
 
 import java.util.ArrayList;
 import java.util.List;

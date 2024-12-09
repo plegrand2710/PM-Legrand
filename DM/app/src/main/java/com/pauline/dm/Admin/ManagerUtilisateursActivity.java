@@ -1,4 +1,4 @@
-package com.pauline.dm;
+package com.pauline.dm.Admin;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -7,6 +7,7 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pauline.dm.GestionBDD.DBAdapter;
+import com.pauline.dm.R;
 
 public class ManagerUtilisateursActivity extends AppCompatActivity {
     private DBAdapter dbAdapter;

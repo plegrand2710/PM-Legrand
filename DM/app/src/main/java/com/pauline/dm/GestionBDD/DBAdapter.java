@@ -8,8 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.pauline.dm.Utilisateur;
-import com.pauline.dm.UtilisateursAdapter;
+import com.pauline.dm.Admin.Produit;
+import com.pauline.dm.Admin.Table;
+import com.pauline.dm.Admin.Utilisateur;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ public class DBAdapter {
                     KEY_MDP + " TEXT NOT NULL, " +
                     KEY_ROLE + " TEXT CHECK(" + KEY_ROLE + " IN ('Superviseur', 'Responsable', 'Serveur', 'Cuisinier')) NOT NULL);";
 
-    static final String TABLE_TABLES = "tables";
+    public static final String TABLE_TABLES = "tables";
     static final String KEY_NUMTABLE = "numTable";
     public static final String KEY_NBCONVIVES = "nbConvives";
     static final String KEY_NBCOLONNE = "numColonne";
@@ -42,6 +43,14 @@ public class DBAdapter {
                     KEY_NBCONVIVES + " INTEGER DEFAULT 0, " +
                     KEY_NBCOLONNE + " INTEGER NOT NULL, " +
                     KEY_NBLIGNE + " INTEGER NOT NULL);";
+
+    public static final String TABLE_SALLE = "salle";
+    static final String KEY_NUMSALLE = "numSalle";
+    public static final String KEY_IMAGE = "image";
+    static final String CREATE_TABLE_SALLE =
+            "CREATE TABLE " + TABLE_SALLE + " (" +
+                    KEY_NUMSALLE + " INTEGER PRIMARY KEY, " +
+                    KEY_IMAGE + " TEXT NOT NULL);";
 
     static final String TABLE_PRODUIT = "produit";
     static final String KEY_IDPRODUIT = "idProduit";
@@ -111,6 +120,7 @@ public class DBAdapter {
                 db.execSQL(CREATE_TABLE_PRODUIT);
                 db.execSQL(CREATE_TABLE_COMMANDE);
                 db.execSQL(CREATE_TABLE_CONTIENT);
+                db.execSQL(CREATE_TABLE_SALLE);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -125,6 +135,8 @@ public class DBAdapter {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUIT);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMANDE);
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTIENT);
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_SALLE);
+
             onCreate(db);
         }
     }
@@ -188,6 +200,17 @@ public class DBAdapter {
         return db.insert(TABLE_TABLES, null, values);
     }
 
+    public boolean insertTableBoolean(int numTable, int nbConvives, int nbColonnes, int nbLignes) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_NUMTABLE, numTable);
+        values.put(KEY_NBCONVIVES, nbConvives);
+        values.put(KEY_NBCOLONNE, nbColonnes);
+        values.put(KEY_NBLIGNE, nbLignes);
+
+        long result = db.insert(TABLE_TABLES, null, values);
+        return result != -1; // Retourne true si l'insertion a réussi
+    }
+
     public Cursor getTable(int numTable) {
         return db.query(TABLE_TABLES, null, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)}, null, null, null);
     }
@@ -200,8 +223,29 @@ public class DBAdapter {
         return db.update(TABLE_TABLES, values, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
     }
 
-    public int deleteTable(int numTable) {
-        return db.delete(TABLE_TABLES, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
+    public Table getTableById(int tableId) {
+        Cursor cursor = db.query(TABLE_TABLES, null, KEY_NUMTABLE + "=?", new String[]{String.valueOf(tableId)}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int numTable = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NUMTABLE));
+            int nbConvives = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NBCONVIVES));
+            int nbColonnes = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NBCOLONNE));
+            int nbLignes = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NBLIGNE));
+            cursor.close();
+            return new Table(numTable, nbConvives, nbColonnes, nbLignes);
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return null;
+    }
+
+    public boolean updateTableBoolean(int tableId, int nbConvives, int nbColonnes, int nbLignes) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_NBCONVIVES, nbConvives);
+        values.put(KEY_NBCOLONNE, nbColonnes);
+        values.put(KEY_NBLIGNE, nbLignes);
+        int rowsAffected = db.update(TABLE_TABLES, values, KEY_NUMTABLE + "=?", new String[]{String.valueOf(tableId)});
+        return rowsAffected > 0;
     }
 
     public long insertProduit(String nomProduit, String categorie, int cuisson, double prix) {
@@ -390,6 +434,22 @@ public class DBAdapter {
                 db.insert(TABLE_TABLES, null, values);
                 break;
 
+                case "salle":
+                if (!jsonObject.has("numSalle") || !jsonObject.has("image")) {
+                    Log.e("DBAdapter", "Clé(s) manquante(s) dans l'objet JSON pour la table salle : " + jsonObject.toString());
+                    return;
+                }
+
+                int numSalle = jsonObject.getInt("numSalle");
+                String imagePath = jsonObject.getString("image").replace("\\/", "/");
+
+                Log.d("DBAdapter", "Insertion dans salle : numSalle=" + numSalle + ", image=" + imagePath);
+
+                values.put("numSalle", numSalle);
+                values.put("image", imagePath);
+                db.insert(tableName, null, values);
+                break;
+
             default:
                 throw new IllegalArgumentException("Table inconnue : " + tableName);
         }
@@ -501,5 +561,171 @@ public class DBAdapter {
         values.put(KEY_MDP, password);
         values.put(KEY_ROLE, role);
         return db.update(TABLE_UTILISATEURS, values, KEY_IDUTILISATEUR + " = ?", new String[]{String.valueOf(id)}) > 0;
+    }
+
+    public List<Table> getAllTables() {
+        List<Table> tables = new ArrayList<>();
+        Cursor cursor = db.query(TABLE_TABLES, null, null, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+                int numTable = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NUMTABLE));
+                int nbConvives = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NBCONVIVES));
+                int nbColonnes = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NBCOLONNE));
+                int nbLignes = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NBLIGNE));
+
+                tables.add(new Table(numTable, nbConvives, nbColonnes, nbLignes));
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+        return tables;
+    }
+
+    public boolean deleteTable(int numTable) {
+        int rowsAffected = db.delete(TABLE_TABLES, KEY_NUMTABLE + "=?", new String[]{String.valueOf(numTable)});
+        return rowsAffected > 0;
+    }
+
+    public boolean updateTableBoolean(Table table, int numTableOriginal) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_NUMTABLE, table.getNumTable());
+        values.put(KEY_NBCONVIVES, table.getNbConvives());
+        values.put(KEY_NBCOLONNE, table.getNumColonne());
+        values.put(KEY_NBLIGNE, table.getNumLigne());
+
+        int rowsAffected = db.update(
+                TABLE_TABLES,
+                values,
+                KEY_NUMTABLE + "=?",
+                new String[]{String.valueOf(numTableOriginal)}
+        );
+
+        return rowsAffected > 0;
+    }
+
+    public long insertSalleImage(String imageUri) {
+        long newRowId = -1;
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_IMAGE, imageUri);
+
+            newRowId = db.insert(TABLE_SALLE, null, values);
+            if (newRowId == -1) {
+                Log.e("DBAdapter", "Erreur lors de l'insertion de l'image de la salle.");
+            } else {
+                Log.d("DBAdapter", "Image de la salle insérée avec succès. ID : " + newRowId);
+            }
+        } catch (Exception e) {
+            Log.e("DBAdapter", "Erreur lors de l'insertion de l'image de la salle : ", e);
+        }
+        return newRowId; // Retourne l'ID de la nouvelle ligne insérée
+    }
+
+    public boolean updateSalleImage(String imageUri) {
+        boolean success = false;
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_IMAGE, imageUri);
+
+            int rowsUpdated = db.update(TABLE_SALLE, values, null, null);
+            success = rowsUpdated > 0;
+
+            if (success) {
+                Log.d("DBAdapter", "Image de la salle mise à jour avec succès.");
+            } else {
+                Log.d("DBAdapter", "Aucune ligne mise à jour pour l'image de la salle.");
+            }
+        } catch (Exception e) {
+            Log.e("DBAdapter", "Erreur lors de la mise à jour de l'image de la salle : ", e);
+        }
+        return success; // Retourne true si la mise à jour a réussi
+    }
+
+    public long saveSalleImage(String imageUri) {
+        long rowId = -1;
+        try {
+            Cursor cursor = db.query(TABLE_SALLE, null, null, null, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                // Une ligne existe déjà, effectue une mise à jour
+                boolean success = updateSalleImage(imageUri);
+                rowId = success ? 1 : -1; // Retourne 1 si la mise à jour a réussi
+            } else {
+                // Aucune ligne existante, effectue une insertion
+                rowId = insertSalleImage(imageUri);
+            }
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        } catch (Exception e) {
+            Log.e("DBAdapter", "Erreur lors de la sauvegarde de l'image de la salle : ", e);
+        }
+        return rowId; // Retourne l'ID de la nouvelle ligne ou 1 pour une mise à jour
+    }
+
+    public String getSalleImage() {
+        String imageUri = null;
+        Cursor cursor = null;
+        try {
+            cursor = db.query(TABLE_SALLE,
+                    new String[]{KEY_IMAGE},
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                imageUri = cursor.getString(cursor.getColumnIndexOrThrow(KEY_IMAGE));
+            }
+        } catch (Exception e) {
+            Log.e("DBAdapter", "Erreur lors de la récupération de l'image de la salle : ", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return imageUri;
+    }
+
+    public List<Produit> getAllProduits() {
+        List<Produit> produits = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            // Requête pour récupérer tous les produits
+            cursor = db.query(
+                    TABLE_PRODUIT, // Table
+                    null,          // Colonnes (null pour tout sélectionner)
+                    null,          // Clause WHERE
+                    null,          // Arguments WHERE
+                    null,          // GROUP BY
+                    null,          // HAVING
+                    null           // ORDER BY
+            );
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int idProduit = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_IDPRODUIT));
+                    String nomProduit = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOMPRODUIT));
+                    String categorie = cursor.getString(cursor.getColumnIndexOrThrow(KEY_CATEGORIE));
+                    boolean cuisson = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_CUISSON)) == 1;
+                    double prix = cursor.getDouble(cursor.getColumnIndexOrThrow(KEY_PRIX));
+
+                    produits.add(new Produit(idProduit, nomProduit, categorie, cuisson, prix));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DBAdapter", "Erreur lors de la récupération des produits", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return produits;
     }
 }

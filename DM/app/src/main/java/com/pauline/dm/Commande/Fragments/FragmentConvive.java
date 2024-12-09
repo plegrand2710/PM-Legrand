@@ -1,4 +1,4 @@
-package com.pauline.dm.Fragments;
+package com.pauline.dm.Commande.Fragments;
 
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -17,8 +17,8 @@ import android.widget.Toast;
 
 import androidx.core.widget.TextViewCompat;
 
-import com.pauline.dm.ConviveCommande;
-import com.pauline.dm.ProduitCommande;
+import com.pauline.dm.Commande.ConviveCommande;
+import com.pauline.dm.Commande.ProduitCommande;
 import com.pauline.dm.R;
 
 import java.util.ArrayList;

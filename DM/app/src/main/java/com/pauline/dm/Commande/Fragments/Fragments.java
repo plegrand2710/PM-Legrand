@@ -1,9 +1,8 @@
-package com.pauline.dm.Fragments;
+package com.pauline.dm.Commande.Fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -12,9 +11,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.pauline.dm.ConviveCommande;
 import com.pauline.dm.GestionBDD.DBAdapter;
-import com.pauline.dm.ProduitCommande;
+import com.pauline.dm.Commande.ProduitCommande;
 
 import java.util.ArrayList;
 import java.util.HashMap;

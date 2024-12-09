@@ -1,10 +1,8 @@
-package com.pauline.dm.Fragments;
+package com.pauline.dm.Commande.Fragments;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 
-import com.pauline.dm.ConviveCommande;
+import com.pauline.dm.Commande.ConviveCommande;
 
 public class FragmentPartage extends FragmentConvive {
 

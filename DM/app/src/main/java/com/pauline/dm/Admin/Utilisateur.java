@@ -1,4 +1,4 @@
-package com.pauline.dm;
+package com.pauline.dm.Admin;
 
 public class Utilisateur {
     private int id;

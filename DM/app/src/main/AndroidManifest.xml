@@ -24,15 +24,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CommandeActivity"
+            android:name=".Commande.CommandeActivity"
             android:label="Commande"
             android:parentActivityName=".ModuleSelectionActivity"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".GestionConviveActivity"
+            android:name=".Commande.GestionConviveActivity"
             android:label="Convive"
-            android:parentActivityName=".CommandeActivity"
+            android:parentActivityName=".Commande.CommandeActivity"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
@@ -42,15 +42,27 @@
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".AdminActivity"
+            android:name=".Admin.AdminActivity"
             android:label="Admin"
             android:parentActivityName=".ModuleSelectionActivity"
             android:windowSoftInputMode="adjustPan" >
         </activity>
         <activity
-            android:name=".ManagerUtilisateursActivity"
+            android:name=".Admin.ManagerUtilisateursActivity"
             android:label="ManagerUtilisateurs"
-            android:parentActivityName=".AdminActivity"
+            android:parentActivityName=".Admin.AdminActivity"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Admin.ModifierDispositionSalleActivity"
+            android:label="ManagerTables"
+            android:parentActivityName=".Admin.AdminActivity"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Admin.ManagerProduitsActivity"
+            android:label="ManagerProduits"
+            android:parentActivityName=".Admin.AdminActivity"
             android:windowSoftInputMode="adjustPan" >
         </activity>
     </application>

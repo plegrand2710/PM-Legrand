@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+android:padding="16dp">
+
+<EditText
+    android:id="@+id/editTextNbConvives"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Nombre de convives"
+    android:inputType="number" />
+
+<EditText
+    android:id="@+id/editTextNbColonnes"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Numéro de colonne"
+    android:inputType="number" />
+
+<EditText
+    android:id="@+id/editTextNbLignes"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:hint="Numéro de ligne"
+    android:inputType="number" />
+</LinearLayout>

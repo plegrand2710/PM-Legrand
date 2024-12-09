@@ -1,7 +1,6 @@
-package com.pauline.dm;
+package com.pauline.dm.Admin;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.pauline.dm.GestionBDD.DBAdapter;
+import com.pauline.dm.R;
 
 import java.util.List;
 public class UtilisateursAdapter extends ArrayAdapter<Utilisateur> {
@@ -51,7 +51,6 @@ public class UtilisateursAdapter extends ArrayAdapter<Utilisateur> {
             ModifierUtilisateurDialog dialog = new ModifierUtilisateurDialog();
             dialog.setUserId(user.getId());
             dialog.setListener(() -> {
-                // Actualisation des données après modification
                 users.clear();
                 users.addAll(dbAdapter.getAllUsers());
                 notifyDataSetChanged();

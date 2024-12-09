@@ -1,18 +1,15 @@
 package com.pauline.dm;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.pauline.dm.Commande.CommandeActivity;
 import com.pauline.dm.GestionBDD.DBAdapter;
 import com.pauline.dm.GestionBDD.GestionnaireSelectBDDDistante;
 

@@ -75,6 +75,7 @@
     <string name="ic_edit_desc">cerle orange d\'arrière plan</string>
     <string name="ic_delete_desc">cerle bleu fonce d\'arrière plan</string>
     <string name="sauvegarderIDCo">Se souvenir de moi</string>
+    <string name="salle_image">Image d\'une table</string>
 
     <string-array name="user_roles">
         <item>Superviseur</item>

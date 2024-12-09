@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.pauline.dm.GestionBDD.DBAdapter;
+import com.pauline.dm.GestionBDD.GestionnaireSelectBDDDistante;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "DMProjet";
@@ -32,11 +33,18 @@ public class LoginActivity extends AppCompatActivity {
 
         db = new DBAdapter(this);
         db.open();
+        GestionnaireSelectBDDDistante gestionnaire = new GestionnaireSelectBDDDistante(LoginActivity.this, "tables", db);
+        GestionnaireSelectBDDDistante gestionnaire1 = new GestionnaireSelectBDDDistante(LoginActivity.this, "produit", db);
+        GestionnaireSelectBDDDistante gestionnaire2 = new GestionnaireSelectBDDDistante(LoginActivity.this, "commande", db);
+        GestionnaireSelectBDDDistante gestionnaire3 = new GestionnaireSelectBDDDistante(LoginActivity.this, "contient", db);
+        GestionnaireSelectBDDDistante gestionnaire4 = new GestionnaireSelectBDDDistante(LoginActivity.this, "utilisateurs", db);
+        GestionnaireSelectBDDDistante gestionnaire5 = new GestionnaireSelectBDDDistante(LoginActivity.this, "salle", db);
 
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);
         cbRememberMe = findViewById(R.id.cbRememberMe);
         btnLogin = findViewById(R.id.btnLogin);
+
 
         loadSavedCredentials();
 

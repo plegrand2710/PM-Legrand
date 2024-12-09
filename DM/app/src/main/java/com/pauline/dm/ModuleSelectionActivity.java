@@ -2,11 +2,16 @@ package com.pauline.dm;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.pauline.dm.Admin.AdminActivity;
+import com.pauline.dm.Commande.CommandeActivity;
 
 public class ModuleSelectionActivity extends AppCompatActivity {
 
@@ -94,6 +99,26 @@ public class ModuleSelectionActivity extends AppCompatActivity {
 
     public void logout(View view) {
         Toast.makeText(this, "Déconnexion réussie", Toast.LENGTH_SHORT).show();
-        finish(); // Retour à l'écran de connexion
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_force_update) {
+            forceUpdateData();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void forceUpdateData() {
+        Toast.makeText(this, "Mise à jour des données en cours...", Toast.LENGTH_SHORT).show();
+        Log.d("LoginActivity", "Les données ont été mises à jour.");
     }
 }

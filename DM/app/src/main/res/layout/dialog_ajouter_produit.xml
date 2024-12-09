@@ -1,0 +1,29 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/etProductName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nom du produit" />
+
+    <Spinner
+        android:id="@+id/spCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Spinner
+        android:id="@+id/spCookingRequired"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/etProductPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Prix" />
+</LinearLayout>

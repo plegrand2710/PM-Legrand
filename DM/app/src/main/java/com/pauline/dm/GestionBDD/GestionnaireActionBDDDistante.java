@@ -10,20 +10,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-public class GestionnaireActionBDDDistante {private static final String BASE_URL = "http://192.168.3.140:8888/DMBDDDistante/";
-    private Context context;
-    private String action;
-    private String parameters;
+public class GestionnaireActionBDDDistante {
+    private static final String BASE_URL = "http://192.168.3.140:8888/DMBDDDistante/";
 
-    public GestionnaireActionBDDDistante(Context context, String action, String parameters) {
-        this.context = context;
-        this.action = action;
-        this.parameters = parameters;
-
-        executerAction();
+    public interface ActionCallback {
+        void onComplete(boolean success);
     }
 
-    private void executerAction() {
+    public GestionnaireActionBDDDistante(Context context, String action, String parameters, ActionCallback callback) {
         String url = BASE_URL + action + "DM.php?" + parameters;
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -31,21 +25,22 @@ public class GestionnaireActionBDDDistante {private static final String BASE_URL
         StringRequest stringRequest = new StringRequest(
                 Request.Method.GET,
                 url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        if (response != null && !response.isEmpty()) {
-                            Toast.makeText(context, "Réponse : " + response, Toast.LENGTH_LONG).show();
-                        } else {
-                            Toast.makeText(context, "Réponse vide du serveur.", Toast.LENGTH_SHORT).show();
-                        }
+                response -> {
+                    boolean success = response.contains("success");
+                    if (success) {
+                        Toast.makeText(context, "Action réussie : " + action, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "Erreur sur l'action : " + action, Toast.LENGTH_SHORT).show();
+                    }
+
+                    if (callback != null) {
+                        callback.onComplete(success);
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Erreur de connexion : " + error.getMessage(), Toast.LENGTH_LONG).show();
-                        error.printStackTrace();
+                error -> {
+                    Toast.makeText(context, "Erreur de connexion : " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    if (callback != null) {
+                        callback.onComplete(false);
                     }
                 }
         );

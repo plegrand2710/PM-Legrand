@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="table_images">
+        <item>table1</item>
+        <item>table2</item>
+        <item>table3</item>
+        <item>table4</item>
+        <item>table5</item>
+    </string-array>
+    <string-array name="product_categories">
+        <item>plat</item>
+        <item>boisson</item>
+        <item>accompagnement</item>
+    </string-array>
+
+    <string-array name="cooking_required">
+        <item>Oui</item>
+        <item>Non</item>
+    </string-array>
+</resources>

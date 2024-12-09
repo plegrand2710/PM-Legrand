@@ -1,6 +1,7 @@
 package com.pauline.dm.GestionBDD;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -16,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GestionnaireSelectBDDDistante {
+    private static final String TAG = "DMProjet";
 
     private static final String BASE_URL = "http://192.168.3.140:8888/DMBDDDistante/";
     private static RequestQueue requestQueue;
@@ -38,7 +40,10 @@ public class GestionnaireSelectBDDDistante {
                 Request.Method.GET,
                 url,
                 null,
-                response -> handleResponse(response, tableName, dbAdapter),
+                response -> {
+                    Log.d(TAG, "Réponse brute reçue : " + response.toString());
+                    handleResponse(response, tableName, dbAdapter);
+                },
                 this::handleError
         );
 
@@ -46,6 +51,8 @@ public class GestionnaireSelectBDDDistante {
     }
 
     private void handleResponse(JSONArray response, String tableName, DBAdapter dbAdapter) {
+        Log.d(TAG, "Réponse JSON : " + response.toString());
+
         try {
             dbAdapter.open();
 

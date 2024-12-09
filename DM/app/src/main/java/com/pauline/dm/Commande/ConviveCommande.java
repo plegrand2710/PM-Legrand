@@ -1,4 +1,5 @@
-package com.pauline.dm;
+package com.pauline.dm.Commande;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

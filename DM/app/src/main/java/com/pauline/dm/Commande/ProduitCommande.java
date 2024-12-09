@@ -1,4 +1,4 @@
-package com.pauline.dm;
+package com.pauline.dm.Commande;
 
 import java.io.Serializable;
 

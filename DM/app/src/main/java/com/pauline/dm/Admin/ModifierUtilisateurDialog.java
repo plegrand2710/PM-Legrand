@@ -1,4 +1,4 @@
-package com.pauline.dm;
+package com.pauline.dm.Admin;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.pauline.dm.GestionBDD.DBAdapter;
+import com.pauline.dm.R;
 
 public class ModifierUtilisateurDialog extends AppCompatDialogFragment {
 
