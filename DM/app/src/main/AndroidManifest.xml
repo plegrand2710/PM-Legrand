@@ -65,6 +65,19 @@
             android:parentActivityName=".Admin.AdminActivity"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+        <activity
+            android:name=".Admin.ManagerCommandesActivity"
+            android:label="ManagerCommandes"
+            android:parentActivityName=".Admin.AdminActivity"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+        <activity
+            android:name=".Admin.ModifierCommandeActivity"
+            android:label="ManagerCommandes"
+            android:parentActivityName=".Admin.ManagerCommandesActivity"
+            android:windowSoftInputMode="adjustPan" >
+        </activity>
+
     </application>
 
 </manifest>

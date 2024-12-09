@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.pauline.dm.Admin.Commande;
+import com.pauline.dm.Admin.Contient;
 import com.pauline.dm.Admin.Produit;
 import com.pauline.dm.Admin.Table;
 import com.pauline.dm.Admin.Utilisateur;
@@ -696,15 +698,14 @@ public class DBAdapter {
         Cursor cursor = null;
 
         try {
-            // Requête pour récupérer tous les produits
             cursor = db.query(
-                    TABLE_PRODUIT, // Table
-                    null,          // Colonnes (null pour tout sélectionner)
-                    null,          // Clause WHERE
-                    null,          // Arguments WHERE
-                    null,          // GROUP BY
-                    null,          // HAVING
-                    null           // ORDER BY
+                    TABLE_PRODUIT,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null
             );
 
             if (cursor != null && cursor.moveToFirst()) {
@@ -727,5 +728,171 @@ public class DBAdapter {
         }
 
         return produits;
+    }
+
+    public List<Commande> getCommandeEnCours() {
+        List<Commande> commandes = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            String selection = "status = ?";
+            String[] selectionArgs = new String[]{"en cours"};
+
+            cursor = db.query(TABLE_COMMANDE, null, selection, selectionArgs, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int idCommande = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_IDCOMMANDE));
+                    String status = cursor.getString(cursor.getColumnIndexOrThrow(KEY_STATUS));
+                    String cuissonCommande = cursor.getString(cursor.getColumnIndexOrThrow(KEY_CUISSON_COMMANDE));
+                    int numTable = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NUMTABLE_FK));
+
+                    List<Contient> produitsAssocies = getProduitsPourCommande(idCommande);
+
+                    Commande commande = new Commande(idCommande, status, cuissonCommande, numTable, produitsAssocies);
+                    commandes.add(commande);
+
+                    Log.d(TAG, "Commande récupérée : " + commande.toString());
+                } while (cursor.moveToNext());
+            } else {
+                Log.d(TAG, "Aucune commande en cours trouvée.");
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "Erreur lors de la récupération des commandes en cours", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return commandes;
+    }
+
+    public List<Contient> getProduitsPourCommande(int idCommande) {
+        List<Contient> produits = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            String query = "SELECT * FROM " + TABLE_CONTIENT + " WHERE " + KEY_IDCOMMANDE_FK + " = ?";
+            cursor = db.rawQuery(query, new String[]{String.valueOf(idCommande)});
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int idProduit = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_IDPRODUIT_FK));
+                    int quantite = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_QUANTITE));
+                    String traitement = cursor.getString(cursor.getColumnIndexOrThrow(KEY_TRAITEMENT_CONTIENT));
+
+                    Contient contient = new Contient(idCommande, idProduit, quantite, traitement);
+                    produits.add(contient);
+
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DBAdapter", "Erreur lors de la récupération des produits pour la commande", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return produits;
+    }
+
+    private Produit getProduitById(int idProduit) {
+        Cursor cursor = db.query(
+                TABLE_PRODUIT,
+                null,
+                KEY_IDPRODUIT + " = ?",
+                new String[]{String.valueOf(idProduit)},
+                null,
+                null,
+                null
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int c = cursor.getColumnIndex(KEY_NOMPRODUIT);
+            String nomProduit = cursor.getString(c);
+            c = cursor.getColumnIndex(KEY_CATEGORIE);
+            String categorie = cursor.getString(c);
+            c= cursor.getColumnIndex(KEY_CUISSON);
+            boolean cuisson = cursor.getInt(c) == 1;
+            c = cursor.getColumnIndex(KEY_PRIX);
+            double prix = cursor.getDouble(c);
+            cursor.close();
+
+            return new Produit(idProduit, nomProduit, categorie, cuisson, prix);
+        }
+        return null;
+    }
+
+    public Commande getCommandeById(int idCommande) {
+        Commande commande = null;
+        String query = "SELECT * FROM " + TABLE_COMMANDE + " WHERE " + KEY_IDCOMMANDE + " = ?";
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(query, new String[]{String.valueOf(idCommande)});
+            if (cursor != null && cursor.moveToFirst()) {
+                int numTable = cursor.getInt(cursor.getColumnIndexOrThrow(KEY_NUMTABLE_FK));
+                String status = cursor.getString(cursor.getColumnIndexOrThrow(KEY_STATUS));
+                String cuissonCommande = cursor.getString(cursor.getColumnIndexOrThrow(KEY_CUISSON_COMMANDE));
+
+                List<Contient> produitsAssocies = getProduitsPourCommande(idCommande);
+
+                commande = new Commande(idCommande, status, cuissonCommande, numTable, produitsAssocies);
+            }
+        } catch (Exception e) {
+            Log.e("DBAdapter", "Erreur lors de la récupération de la commande", e);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return commande;
+    }
+
+    public String getNomProduitById(int idProduit) {
+        String nomProduit = null;
+        String query = "SELECT " + KEY_NOMPRODUIT + " FROM " + TABLE_PRODUIT + " WHERE " + KEY_IDPRODUIT + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(idProduit)});
+        if (cursor != null && cursor.moveToFirst()) {
+            nomProduit = cursor.getString(cursor.getColumnIndexOrThrow(KEY_NOMPRODUIT));
+            cursor.close();
+        }
+        return nomProduit;
+    }
+    public boolean deleteProduitFromCommande(int idCommande, int idProduit) {
+        try {
+            String whereClause = KEY_IDCOMMANDE + " = ? AND " + KEY_IDPRODUIT + " = ?";
+            String[] whereArgs = {String.valueOf(idCommande), String.valueOf(idProduit)};
+
+            int rowsDeleted = db.delete(TABLE_CONTIENT, whereClause, whereArgs);
+
+            return rowsDeleted > 0;
+        } catch (Exception e) {
+            Log.e("DBAdapter", "Erreur lors de la suppression du produit de la commande : ", e);
+            return false;
+        }
+    }
+
+    public boolean updateQuantiteProduitInCommande(int idCommande, int idProduit, int nouvelleQuantite) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_QUANTITE, nouvelleQuantite);
+
+        int rowsAffected = db.update(TABLE_CONTIENT,
+                values,
+                KEY_IDCOMMANDE + " = ? AND " + KEY_IDPRODUIT + " = ?",
+                new String[]{String.valueOf(idCommande), String.valueOf(idProduit)});
+        return rowsAffected > 0;
+    }
+
+    public boolean insertProduitIntoCommande(int idCommande, int idProduit, int quantite, String traitement) {
+        ContentValues values = new ContentValues();
+        values.put(KEY_IDCOMMANDE, idCommande);
+        values.put(KEY_IDPRODUIT, idProduit);
+        values.put(KEY_QUANTITE, quantite);
+        values.put(KEY_TRAITEMENT_CONTIENT, traitement);
+        long result = db.insert(TABLE_CONTIENT, null, values);
+        return result != -1;
     }
 }

@@ -42,11 +42,6 @@
     <string name="boisson">Boisson</string>
     <string name="accompagnement">Accompagnement</string>
     <string name="plat">Plat</string>
-    <string name="bleu">Bleu</string>
-    <string name="medium">Medium</string>
-    <string name="Saignant">Saignant</string>
-    <string name="BienCuit">Bien cuit</string>
-    <string name="aPoint">À point</string>
     <string name="boissonPartage">Boisson Partagé</string>
     <string name="accompagnementPartage">Accompagnement Partagé</string>
     <string name="platPartage">Plat Partagé</string>
@@ -83,4 +78,9 @@
         <item>Serveur</item>
         <item>Cuisinier</item>
     </string-array>
+
+    <string name="select_cuisson">cuisson</string>
+    <string name="quantite">quantite</string>
+    <string name="ajouter">ajouter le produit</string>
+
 </resources>

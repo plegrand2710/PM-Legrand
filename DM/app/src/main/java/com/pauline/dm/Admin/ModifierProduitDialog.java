@@ -50,7 +50,6 @@ public class ModifierProduitDialog extends AppCompatDialogFragment {
         spCategorieProduit = view.findViewById(R.id.spCategorieProduit);
         cbCuisson = view.findViewById(R.id.cbCuisson);
 
-        // Charger les catégories dans le spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 getContext(),
                 R.array.product_categories,
@@ -59,7 +58,6 @@ public class ModifierProduitDialog extends AppCompatDialogFragment {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCategorieProduit.setAdapter(adapter);
 
-        // Pré-remplir les champs si un produit est passé
         if (produit != null) {
             etNomProduit.setText(produit.getNom());
             etPrixProduit.setText(String.valueOf(produit.getPrix()));
@@ -70,9 +68,8 @@ public class ModifierProduitDialog extends AppCompatDialogFragment {
         builder.setView(view)
                 .setTitle(produit == null ? "Ajouter un produit" : "Modifier un produit")
                 .setNegativeButton("Annuler", null)
-                .setPositiveButton("Enregistrer", null); // Bouton personnalisé plus bas
+                .setPositiveButton("Enregistrer", null);
 
-        // Ajouter un comportement personnalisé au bouton Enregistrer
         AlertDialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> {
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);

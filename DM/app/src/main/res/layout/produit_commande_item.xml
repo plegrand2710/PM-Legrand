@@ -1,0 +1,60 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/tvNomProduit"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Nom Produit"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black" />
+
+    <EditText
+        android:id="@+id/etQuantiteProduit"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Qté"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:background="@drawable/edit_text_background"
+        android:padding="4dp"
+        android:layout_marginEnd="8dp" />
+
+    <ImageView
+        android:id="@+id/ivUpdateQuantite"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/square_edit_outline"
+        android:background="@drawable/cercle_orange_background"
+        app:tint="@color/color_blancCasse"
+        android:padding="10dp"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Bouton Supprimer Produit -->
+    <ImageView
+        android:id="@+id/ivDeleteProduit"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/delete"
+        android:background="@drawable/cercle_bleu_fonce_background"
+        android:padding="10dp"
+        app:tint="@color/color_blancCasse"
+        android:layout_marginEnd="8dp" />
+
+    <ImageView
+        android:id="@+id/ivAddProduit"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/playlist_plus"
+        android:background="@drawable/cercle_orange_background"
+        app:tint="@color/color_blancCasse"
+        android:padding="10dp" />
+</LinearLayout>

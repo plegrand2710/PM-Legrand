@@ -1,6 +1,8 @@
 package com.pauline.dm.Admin;
 
-public class Produit {
+import java.io.Serializable;
+
+public class Produit implements Serializable {
     private int id;
     private String nom;
     private String categorie;
@@ -19,39 +21,24 @@ public class Produit {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNom() {
         return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     public String getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(String categorie) {
-        this.categorie = categorie;
-    }
-
     public boolean isNecessiteCuisson() {
         return necessiteCuisson;
-    }
-
-    public void setNecessiteCuisson(boolean necessiteCuisson) {
-        this.necessiteCuisson = necessiteCuisson;
     }
 
     public double getPrix() {
         return prix;
     }
 
-    public void setPrix(double prix) {
-        this.prix = prix;
+    @Override
+    public String toString() {
+        return nom;
     }
 }

@@ -30,7 +30,6 @@ public class AdminActivity extends AppCompatActivity {
         btnManageTables.setOnClickListener(v -> {
             Intent intent = new Intent(AdminActivity.this, ModifierDispositionSalleActivity.class);
             startActivity(intent);
-            Log.d(TAG, "onCreate: j'ai lancé admin");
         });
 
         btnManageProducts.setOnClickListener(v -> {
@@ -39,8 +38,11 @@ public class AdminActivity extends AppCompatActivity {
         });
 
         btnViewOrders.setOnClickListener(v -> {
-            /*Intent intent = new Intent(AdminActivity.this, ViewOrdersActivity.class);
-            startActivity(intent);*/
+            Log.d(TAG, "onCreate: je charge commande");
+            Intent intent = new Intent(AdminActivity.this, ManagerCommandesActivity.class);
+            Log.d(TAG, "onCreate: début de commande");
+            startActivity(intent);
+            Log.d(TAG, "onCreate: j'ai lancé commande");
         });
     }
 }
