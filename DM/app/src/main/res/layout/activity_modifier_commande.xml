@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tvEditCommandeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Modifier Commande"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/color_bleuFonce" />
+
+    <TextView
+        android:id="@+id/tvNumTableLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Numéro de Table"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/etNumTableCommande"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Entrez le numéro de table"
+        android:inputType="number"
+        android:padding="12dp"
+        android:background="@drawable/edit_text_background"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tvProduitsLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Produits associés"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
+
+    <ListView
+        android:id="@+id/produitsListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@color/color_bleuVert"
+        android:dividerHeight="1dp"
+        android:background="@android:color/white" />
+
+    <!-- Boutons Enregistrer / Retour -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btnSaveCommande"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enregistrer"
+            android:backgroundTint="@color/color_bleuVert"
+            android:textColor="@android:color/white"
+            android:layout_marginEnd="12dp" />
+
+        <Button
+            android:id="@+id/btnBackCommande"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retour"
+            android:backgroundTint="@color/color_orange"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+</LinearLayout>
