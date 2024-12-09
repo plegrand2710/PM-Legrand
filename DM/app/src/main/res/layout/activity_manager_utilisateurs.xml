@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <!-- Titre de l'activité -->
+    <TextView
+        android:id="@+id/tvManageUsersTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gérer les utilisateurs"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_bleuFonce"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Bouton pour ajouter un utilisateur -->
+    <Button
+        android:id="@+id/btnAddUser"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ajouter un utilisateur"
+        android:backgroundTint="@color/color_bleuVert"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="12dp" />
+
+    <ListView
+        android:id="@+id/userListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@color/color_bleuVert"
+        android:dividerHeight="1dp"
+        android:background="@android:color/white" />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Retour"
+        android:backgroundTint="@color/color_orange"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

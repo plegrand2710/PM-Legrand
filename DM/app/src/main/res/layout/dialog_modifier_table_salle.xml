@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Champ pour le numéro de table -->
+    <TextView
+        android:id="@+id/tvNumTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Numéro de la table"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etNumTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Exemple : 1"
+        android:padding="8dp"
+        android:background="@android:drawable/editbox_background" />
+
+    <!-- Champ pour le nombre de colonnes -->
+    <TextView
+        android:id="@+id/tvNbColonnes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre de colonnes"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etNbColonnes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Exemple : 2"
+        android:padding="8dp"
+        android:background="@android:drawable/editbox_background" />
+
+    <!-- Champ pour le nombre de lignes -->
+    <TextView
+        android:id="@+id/tvNbLignes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre de lignes"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp" />
+
+    <EditText
+        android:id="@+id/etNbLignes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:hint="Exemple : 3"
+        android:padding="8dp"
+        android:background="@android:drawable/editbox_background" />
+
+    <!-- Spinner pour choisir l'image de la table -->
+    <TextView
+        android:id="@+id/tvImageTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Image de la table"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="4dp" />
+
+    <Spinner
+        android:id="@+id/spImageTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+</LinearLayout>

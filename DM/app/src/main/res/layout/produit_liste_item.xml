@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tvProductName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="2"
+        android:text="Nom"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvProductCategory"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Catégorie"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvProductPrice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Prix"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:background="@drawable/cercle_orange_background"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:onClick="onEditClick">
+
+        <ImageView
+            android:id="@+id/ivEdit"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/account_edit"
+            app:tint="@color/color_blancCasse"
+            android:contentDescription="@string/ic_edit_desc" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="4dp"
+        android:background="@drawable/cercle_bleu_fonce_background"
+        android:gravity="center"
+        android:onClick="onDeleteClick">
+
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/delete"
+            app:tint="@color/color_blancCasse"
+            android:contentDescription="@string/sauvegarderIDCo" />
+    </LinearLayout>
+</LinearLayout>
