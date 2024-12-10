@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center_horizontal">
+
+    <EditText
+        android:id="@+id/NumEntre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/numerotable"
+        android:inputType="number"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/valide"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/valideNum"/>
+
+    <TextView
+        android:id="@+id/choix"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/choix" />
+
+    <TextView
+        android:id="@+id/selectionTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/selectionTable"
+        android:textAllCaps="true"
+        android:textColor="@color/color_bleuFonce"
+        android:textSize="20sp"
+        android:textStyle="bold|italic" />
+
+    <GridLayout
+        android:id="@+id/gridLayoutTables"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:padding="16dp"
+        android:layout_gravity="center_horizontal"/>
+</LinearLayout>

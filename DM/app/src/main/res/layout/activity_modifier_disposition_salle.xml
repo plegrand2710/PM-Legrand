@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvManageUsersTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gérer les tables"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_bleuFonce"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <ImageView
+        android:id="@+id/salleImageView"
+        android:layout_width="match_parent"
+        android:layout_height="398dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/salle_image"
+        android:scaleType="centerCrop" />
+
+    <Button
+        android:id="@+id/btnImportLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:backgroundTint="@color/color_bleuVert"
+        android:text="Importer dessin de salle" />
+
+    <EditText
+        android:id="@+id/etNumTables"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de tables"
+        android:inputType="number"
+        android:layout_marginBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnSaveTable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enregistrer" />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Retour"
+        android:layout_marginTop="12dp" />
+</LinearLayout>

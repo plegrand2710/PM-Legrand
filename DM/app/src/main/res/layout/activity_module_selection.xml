@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <TextView
+        android:id="@+id/tvWelcome"
+        style="@style/TextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_gravity="center"
+        android:textSize="29sp"
+        android:gravity="center"
+        android:text="@string/selectionModule"
+        android:textColor="@color/color_bleuFonce"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Commandes Module -->
+        <LinearLayout
+            android:id="@+id/layoutCommandes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/button_background"
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:onClick="openCommandesModule">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/table_chair"
+                android:contentDescription="@string/ic_commandes_desc"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/color_blancCasse"
+                android:onClick="openCommandesModule" />
+
+            <TextView
+                android:id="@+id/btnCommandes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/commande"
+                style="@style/ButtonStyle"
+                android:textColor="@color/color_blancCasse"
+                android:onClick="openCommandesModule" />
+        </LinearLayout>
+
+        <!-- Caisse Module -->
+        <LinearLayout
+            android:id="@+id/layoutCaisse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/button_background"
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:onClick="openCaisseModule">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/account_credit_card"
+                android:contentDescription="@string/ic_caisse_desc"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/color_blancCasse"
+                android:onClick="openCaisseModule" />
+
+            <TextView
+                android:id="@+id/btnCaisse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/caisse"
+                style="@style/ButtonStyle"
+                android:textColor="@color/color_blancCasse"
+                android:onClick="openCaisseModule" />
+        </LinearLayout>
+
+        <!-- Cuisine Module -->
+        <LinearLayout
+            android:id="@+id/layoutCuisine"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/button_background"
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:onClick="openCuisineModule">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/chef_hat"
+                android:contentDescription="@string/ic_cuisine_desc"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/color_blancCasse"
+                android:onClick="openCuisineModule" />
+
+            <TextView
+                android:id="@+id/btnCuisine"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cuisine"
+                style="@style/ButtonStyle"
+                android:textColor="@color/color_blancCasse"
+                android:onClick="openCuisineModule" />
+        </LinearLayout>
+
+        <!-- Admin Module -->
+        <LinearLayout
+            android:id="@+id/layoutAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/button_background"
+            android:gravity="center_vertical"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"
+            android:onClick="openAdminModule">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/account_supervisor"
+                android:contentDescription="@string/ic_admin_desc"
+                android:layout_marginEnd="12dp"
+                app:tint="@color/color_blancCasse"
+                android:onClick="openAdminModule"/>
+
+            <TextView
+                android:id="@+id/btnAdmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/admin"
+                style="@style/ButtonStyle"
+                android:textColor="@color/color_blancCasse"
+                android:onClick="openAdminModule" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnLogout"
+        style="@style/ButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/deconnexion"
+        android:backgroundTint="@color/color_orange"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="24dp"
+        android:onClick="logout" />
+</LinearLayout>
