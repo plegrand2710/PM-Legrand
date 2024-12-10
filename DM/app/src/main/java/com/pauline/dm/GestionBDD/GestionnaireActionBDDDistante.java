@@ -12,8 +12,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 public class GestionnaireActionBDDDistante {
-    private static final String BASE_URL = "http://192.168.3.140:8888/DMBDDDistante/";
-    //private static final String BASE_URL = "http://10.16.0.41/";
+    //private static final String BASE_URL = "http://192.168.3.140:8888/DMBDDDistante/";
+    private static final String BASE_URL = "http://10.16.0.41/";
     private static final String TAG = "DMProjet";
 
     public interface ActionCallback {

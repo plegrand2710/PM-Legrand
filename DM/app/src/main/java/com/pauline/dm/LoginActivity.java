@@ -33,12 +33,12 @@ public class LoginActivity extends AppCompatActivity {
 
         db = new DBAdapter(this);
         db.open();
-        //GestionnaireSelectBDDDistante gestionnaire = new GestionnaireSelectBDDDistante(LoginActivity.this, "tables", db);
-        //GestionnaireSelectBDDDistante gestionnaire1 = new GestionnaireSelectBDDDistante(LoginActivity.this, "produit", db);
-        //GestionnaireSelectBDDDistante gestionnaire2 = new GestionnaireSelectBDDDistante(LoginActivity.this, "commande", db);
+        GestionnaireSelectBDDDistante gestionnaire = new GestionnaireSelectBDDDistante(LoginActivity.this, "tables", db);
+        GestionnaireSelectBDDDistante gestionnaire1 = new GestionnaireSelectBDDDistante(LoginActivity.this, "produit", db);
+        GestionnaireSelectBDDDistante gestionnaire2 = new GestionnaireSelectBDDDistante(LoginActivity.this, "commande", db);
         GestionnaireSelectBDDDistante gestionnaire3 = new GestionnaireSelectBDDDistante(LoginActivity.this, "contient", db);
-        //GestionnaireSelectBDDDistante gestionnaire4 = new GestionnaireSelectBDDDistante(LoginActivity.this, "utilisateurs", db);
-        //GestionnaireSelectBDDDistante gestionnaire5 = new GestionnaireSelectBDDDistante(LoginActivity.this, "salle", db);
+        GestionnaireSelectBDDDistante gestionnaire4 = new GestionnaireSelectBDDDistante(LoginActivity.this, "utilisateurs", db);
+        GestionnaireSelectBDDDistante gestionnaire5 = new GestionnaireSelectBDDDistante(LoginActivity.this, "salle", db);
 
         editTextUsername = findViewById(R.id.editTextUsername);
         editTextPassword = findViewById(R.id.editTextPassword);

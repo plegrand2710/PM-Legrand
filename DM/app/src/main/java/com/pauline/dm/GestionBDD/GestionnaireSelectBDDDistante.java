@@ -19,8 +19,8 @@ import org.json.JSONObject;
 public class GestionnaireSelectBDDDistante {
     private static final String TAG = "DMProjet";
 
-    private static final String BASE_URL = "http://192.168.3.140:8888/DMBDDDistante/";
-    //private static final String BASE_URL = "http://10.16.0.41/";
+    //private static final String BASE_URL = "http://192.168.3.140:8888/DMBDDDistante/";
+    private static final String BASE_URL = "http://10.16.0.41/";
     private static RequestQueue requestQueue;
     private final Context context;
 
