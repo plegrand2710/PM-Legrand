@@ -2,7 +2,6 @@
 $host = 'localhost';
 $dbname = 'DM';
 $user = 'root';
-//$pass = '#pl2004UPF';
 $pass = 'root';
 
 try {
